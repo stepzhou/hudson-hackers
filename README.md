@@ -1,6 +1,18 @@
-Hudson Hackers
-==============
+PlanIt
+======
 
-Fall 2013 UI Design Final Project
+The Hudson Hackers
+------------------
 
-Foursquare trip planning app. In progress.
+*    Will McAuliff
+*    Emily Schultz
+*    Sean Wong
+*    Stephen Zhou
+
+What is it?
+-----------
+
+Finding it difficult to plan an event? PlanIt allows you to easily plan a
+spatial and interactive itinerary using popular and reviewed locations from the
+Foursquare API.
+
