@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-   <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
-   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
-   <link rel="stylesheet" href="css/custom.css" />
+    <title>New Itinerary</title>
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/custom.css" />
   </head>
 
   <body>
@@ -37,15 +38,29 @@
       </div>
     </div>
 
-    <div class="container">
-    </div><!-- /.container -->
-    <div id="map"></div>
+    <div class="row">
+      <div class="col-md-9">
+        <div id="map"></div>
+      </div>
+      <div class="col-md-3">
+        <ul class="sortable">
+          <li draggable="true">Item 1
+          <li draggable="true">Item 2
+          <li draggable="true">Item 3
+          <li draggable="true">Item 4
+        </ul>
+      </div>
+    </div>
 
+    <script src="lib/jquery/jquery-1.10.2.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/leaflet/leaflet.js"></script>
-    <script src="lib/jquery/jquery-1.10.2.min.js"></script>
     <script src="lib/foursquare/foursquare.js"></script>
+    <script src="lib/html5sortable/jquery.sortable.min.js"></script>
     <script src="js/configs.js"></script>
     <script src="js/view.js"></script>
+    <script>
+      $('.sortable').sortable();
+    </script>
   </body>
 </html>
