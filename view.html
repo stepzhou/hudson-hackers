@@ -2,12 +2,46 @@
 <html>
   <head>
    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
    <link rel="stylesheet" href="css/custom.css" />
   </head>
 
   <body>
-    <div id="map"></div>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">PlanIt</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Venue">
+            </div>
+            near
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Location">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="#">Manage</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
 
+    <div class="container">
+      <div id="map"></div>
+    </div><!-- /.container -->
+
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/leaflet/leaflet.js"></script>
     <script src="lib/jquery/jquery-1.10.2.min.js"></script>
     <script src="lib/foursquare/foursquare.js"></script>
