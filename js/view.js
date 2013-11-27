@@ -9,6 +9,36 @@ $(function() {
     }).addTo(map);
 
 
+    // Messing around with Markers
+
+    // Sample Marker 1
+    marker1_title = 'Marker 1';
+    marker1_location = [40.77976354892044, -73.97008627653122];
+    var marker1 = L.marker(marker1_location, {
+          title:marker1_title, 
+          riseOnHover:true
+    }).addTo(map);
+
+    venue_name = 'Shakespeare Garden';
+    venue_description = 'i am in the park';
+    venue_link = "https://foursquare.com/v/shakespeare-garden/4abe7a18f964a520e78d20e3";
+    marker1_text = '<b>' + venue_name + '</b><br>' + venue_description + '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+    marker1.bindPopup(marker1_text);
+
+    // Sample Marker 2
+    marker2_title = 'Marker 2';
+    marker2_location = [40.778667, -73.971635];
+    var marker2 = L.marker(marker2_location, {
+          title:marker2_title, 
+          riseOnHover:true
+    }).addTo(map);
+
+    venue_name = 'Bank Rock Bridge';
+    venue_description = 'i am in the same park';
+    venue_link = "https://foursquare.com/v/bank-rock-bridge/4edfbf9a9a52cb6e8fb487d0";
+    marker2_text = '<b>' + venue_name + '</b><br>' + venue_description + '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+    marker2.bindPopup(marker2_text);
+
     $('#search-form').submit(function	()	{
 		var	venue = $('#venue-text').val(),
 			location = $('#location-text').val();
@@ -37,5 +67,4 @@ $(function() {
 			}
 		);
 	}
-
 });
