@@ -3,4 +3,5 @@
 
 var cloudmade_key = "";
 
-var foursquare_key = "";
+var foursquare_client = "",
+    foursquare_secret = "";
