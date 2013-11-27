@@ -39,9 +39,11 @@ $(function() {
     marker2_text = '<b>' + venue_name + '</b><br>' + venue_description + '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
     marker2.bindPopup(marker2_text);
 
-    $('#search-form').submit(function	()	{
+    $('#search-form').submit(function ()	{
 		var	venue = $('#venue-text').val(),
 			location = $('#location-text').val();
+
+
 
 		if(!location) { 
 			// implement this later; need to convert longitude/latitude or use appropriate parameter
@@ -51,20 +53,24 @@ $(function() {
 			location = 'New York'; // default to New York for now
 		}
 
+		console.log("venue: " + venue);
+		console.log("location: " + location);
+
 		if (!!venue) {
 			//make calls to foursquare API
+			searchFoursquare(venue, location);
 		}
+
+		return false;
 	});
 
-	function searchFourSquare(venue, location) {
+	function searchFoursquare(venue, location) {
 		//Foursquare(apiKey, authUrl, apiUrl)
 		var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
-		this.foursquare = new Foursquare(apiKey, "https://foursquare.com/oauth2/authorize", "https://api.foursquare.com");
+		var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
 
-		foursquare.searchNearVenues(location, 
-			function (reply) {
-
-			}
-		);
+		foursquare.searchNearVenues(location, venue, function (reply) { 
+			console.log(reply);
+		});
 	}
 });
