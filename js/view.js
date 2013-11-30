@@ -43,9 +43,8 @@ $(function() {
 		var	venue = $('#venue-text').val(),
 			location = $('#location-text').val();
 
-
-
-		if(!location) { 
+        // get location; if null, use a default
+        if(!location) { 
 			// implement this later; need to convert longitude/latitude or use appropriate parameter
 			// if(navigator.geolocation) {
 				// navigator.geolocation.getCurrentPosition(searchFourSquare);
@@ -53,9 +52,8 @@ $(function() {
 			location = 'New York'; // default to New York for now
 		}
 
-		console.log("venue: " + venue);
-		console.log("location: " + location);
-
+        // validate venue 
+        // implement error-checking
 		if (!!venue) {
 			//make calls to foursquare API
 			searchFoursquare(venue, location);
@@ -65,12 +63,13 @@ $(function() {
 	});
 
 	function searchFoursquare(venue, location) {
-		//Foursquare(apiKey, authUrl, apiUrl)
 		var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
 		var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
 
-		foursquare.searchNearVenues(location, venue, function (reply) { 
-			console.log(reply);
-		});
+		foursquare.searchNearVenues(location, venue, function(reply) { 
+            console.log("Search location: " + location);
+            console.log("Search venue: " + venue);
+			console.log("Reply: " + reply);
+		}); 
 	}
 });
