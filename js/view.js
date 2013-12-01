@@ -15,6 +15,8 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.markerLayer = new L.layerGroup();
     this.markerLayer.addTo(map);
     this.searchForm();
+
+    this.currentItinerary = new Array();
 }
 
 View.prototype.searchForm = function() {
@@ -86,8 +88,12 @@ View.prototype.addVenueMarker = function(venue) {
     this.markerLayer.addLayer(marker);
 }
 
+// TODO: Make object to hold this information
 function addToItinerary (venueID) {
     console.log("veneue " + venueID + " was clicked");
+    $(".sortable").append("<li draggable='true'>" + venueID);
+    $(".sortable").sortable();
+    this.currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
 }
 
 $(function() {
