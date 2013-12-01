@@ -40,9 +40,6 @@ $(function() {
     marker2.bindPopup(marker2_text);
 
     $('#search-form').submit(function ()	{
-        var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
-        var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
-
 		var	venue = $('#venue-text').val(),
 			location = $('#location-text').val();
 
@@ -59,42 +56,20 @@ $(function() {
         // implement error-checking
 		if (!!venue) {
 			//make calls to foursquare API
-			// searchFoursquare(venue, location);
-            console.log("It got here.");
-            // foursquare.searchNearVenues(location, venue, bind(this.searchFoursquare, this));
-
-            new PlaceList().run();
-            console.log("It got here too.");
+			searchFoursquare(venue, location);
 		}
 
 		return false;
 	});
 
-	function searchFoursquare(result) {
-	   console.log(result);
+	function searchFoursquare(venue, location) {
+		var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
+		var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
 
-    	// var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
-		// var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
-
-
-		// foursquare.searchNearVenues(location, venue, function(reply) { 
-  //           console.log("Search location: " + location);
-  //           console.log("Search venue: " + venue);
-		// 	console.log("Reply: " + reply);
-		// }); 
+		foursquare.searchNearVenues(location, venue, function(reply) { 
+            console.log("Search location: " + location);
+            console.log("Search venue: " + venue);
+			console.log(reply);
+		}); 
 	}
 });
-
-function PlaceList() {
-    this.foursquare = new Foursquare(foursquare_client, "https://foursquare.com/", "https://api.foursquare.com");
-}
-
-PlaceList.prototype.run = function() {
-    var location = "Boston";
-    var venue = "coffee";
-    this.foursquare.searchNearVenues(location, venue, bind(this.onHistory, this));
-}
-
-PlaceList.prototype.onHistory = function(history) { 
-    console.log(history);
-}
