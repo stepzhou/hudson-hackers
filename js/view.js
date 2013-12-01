@@ -1,7 +1,7 @@
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map')
-        .setView([40.78, -73.97], 12);
+        .setView([40.78, -73.97], 13);
     var map = this.map;
     L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
@@ -20,37 +20,46 @@ View.prototype.searchForm = function() {
         var venue = $('#venue-text').val(),
             location = $('#location-text').val();
 
-        // get location; if null, use a default
+        // TODO: validate venues
+        // get location; if null, use a default for now
         if(!location) { 
-            // implement this later; need to convert longitude/latitude or use appropriate parameter
-            // if(navigator.geolocation) {
-            // navigator.geolocation.getCurrentPosition(searchFourSquare);
-            // }
             location = 'New York'; // default to New York for now
+            that.drawMarkers(venue);
         }
+        else {
+            // TODO: allow user to select from multiple options instead of hardcode
+            // that.foursquare.geocode(location, function(reply) {
+            //     for (var i = 0; i < reply.length; i++) {
+            //         console.log(reply[i]);
+            //     }
+            // });
 
-        // validate venue 
-        // implement error-checking
-        if (!!venue) {
-            that.markerLayer.clearLayers();
-            that.foursquare.searchNearVenues(location, venue, bind(that.onVenues, that)); 
+            that.foursquare.geocode(location, function(reply) {
+                var locCenter = reply[0]['feature']['geometry']['center'];
+                that.map.setView(locCenter, 13);
+                that.drawMarkers(venue);
+            });
         }
 
         return false;
     });
 }
 
+View.prototype.drawMarkers = function(venue) {
+    this.markerLayer.clearLayers();
+    var center = this.map.getCenter();
+    this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
+}
+
 View.prototype.onVenues = function(venues) {
-    for (var i = 0; i < venues[0].items.length; i++) {
-        console.log(venues[0].items[i]);
-        this.addVenueMarker(venues[0].items[i]);
+    for (var i = 0; i < venues.length; i++) {
+        this.addVenueMarker(venues[i]);
     }
 }
 
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
     venue_name = venue.name;
-    console.log("description:" + venue.description);
     if (!!venue.description) {
         venue_description = venue.description;
     }
