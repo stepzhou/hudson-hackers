@@ -1,3 +1,5 @@
+var _markerID = 0;
+
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map')
@@ -69,9 +71,12 @@ View.prototype.addVenueMarker = function(venue) {
     }
 
     var venue_link = venue.canonicalUrl;
-    var marker_text = '<b>' + venue_name + '</b>';
+    var marker_text = '<div id="'  + (++_markerID) + '">';
+    marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+    marker_text += '<br><button onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '</div>'
 
     var marker = new L.Marker(latLng)
         .bindPopup(marker_text)
@@ -81,11 +86,19 @@ View.prototype.addVenueMarker = function(venue) {
     this.markerLayer.addLayer(marker);
 }
 
+function addToItinerary (venueID) {
+    console.log("veneue " + venueID + " was clicked");
+}
+
 $(function() {
     new View(foursquare_client, foursquare_secret, 
              "https://foursquare.com/", "https://api.foursquare.com",
              cloudmade_key);
 });
+
+
+//-------------------FILE SYSTEM API CODE-----------------------//
+
 
 //TEMPORARY STORAGE - HTML5ROCKS.COM
 //window.requestFileSystem(window.TEMPORARY, 5*1024*1024 /*5MB*/, onInitFs, errorHandler);
