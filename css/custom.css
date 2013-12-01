@@ -2,6 +2,10 @@ html, body, .mapparent {
   height: 100%;
 }
 
+footer {
+  padding-top: 50px;
+}
+
 #map {
   height: 100%;
 }

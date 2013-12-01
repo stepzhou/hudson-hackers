@@ -7,6 +7,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
         key: cloudmadeKey,
         styleId: 96931,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        minZoom: 11,
         maxZoom: 18
     }).addTo(map);
     this.markerLayer = new L.layerGroup();
@@ -53,29 +54,30 @@ View.prototype.drawMarkers = function(venue) {
 
 View.prototype.onVenues = function(venues) {
     for (var i = 0; i < venues.length; i++) {
-        // console.log(venues[0].items[i]);
         this.foursquare.getVenueInformation(venues[i].id, bind(this.addVenueMarker, this));        
-        // this.addVenueMarker(venues[0].items[i]);
     }
 }
 
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
-    venue_name = venue.name;
+    var venue_name = venue.name;
     if (!!venue.description) {
-        venue_description = venue.description;
+        var venue_description = '<br/>' + venue.description;
     }
     else {
-        venue_description = "No description available.";
+        var venue_description = "";
     }
-    venue_link = venue.canonicalUrl;
-    marker_text = '<b>' + venue_name + '</b><br>' + venue_description + '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+
+    var venue_link = venue.canonicalUrl;
+    var marker_text = '<b>' + venue_name + '</b>';
+    marker_text += venue_description;
+    marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
 
     var marker = new L.Marker(latLng)
         .bindPopup(marker_text)
         //.bindPopup(venue['name'])
-        .on('mouseover', function(e) { this.openPopup(); })
-        .on('mouseout', function(e) { this.closePopup(); });
+        .on('click', function(e) { this.openPopup(); })
+        .on('unclick', function(e) { this.closePopup(); });
     this.markerLayer.addLayer(marker);
 }
 
