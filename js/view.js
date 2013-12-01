@@ -53,7 +53,9 @@ View.prototype.drawMarkers = function(venue) {
 
 View.prototype.onVenues = function(venues) {
     for (var i = 0; i < venues.length; i++) {
-        this.addVenueMarker(venues[i]);
+        // console.log(venues[0].items[i]);
+        this.foursquare.getVenueInformation(venues[i].id, bind(this.addVenueMarker, this));        
+        // this.addVenueMarker(venues[0].items[i]);
     }
 }
 
