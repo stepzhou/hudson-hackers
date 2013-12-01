@@ -46,8 +46,20 @@ View.prototype.onVenues = function(venues) {
 
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
+    venue_name = venue.name;
+    console.log("description:" + venue.description);
+    if (!!venue.description) {
+        venue_description = venue.description;
+    }
+    else {
+        venue_description = "No description available.";
+    }
+    venue_link = venue.canonicalUrl;
+    marker_text = '<b>' + venue_name + '</b><br>' + venue_description + '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+
     var marker = new L.Marker(latLng)
-        .bindPopup(venue['name'])
+        .bindPopup(marker_text)
+        //.bindPopup(venue['name'])
         .on('mouseover', function(e) { this.openPopup(); })
         .on('mouseout', function(e) { this.closePopup(); });
     this.map.addLayer(marker);
