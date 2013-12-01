@@ -30,15 +30,27 @@ View.prototype.searchForm = function() {
         // validate venue 
         // implement error-checking
         if (!!venue) {
-            that.foursquare.searchNearVenues(location, venue, function(reply) { 
-                console.log("Search location: " + location);
-                console.log("Search venue: " + venue);
-                console.log(reply);
-            }); 
+            that.foursquare.searchNearVenues(location, venue, bind(that.onVenues, that)); 
         }
 
         return false;
     });
+}
+
+View.prototype.onVenues = function(venues) {
+    for (var i = 0; i < venues[0].items.length; i++) {
+        console.log(venues[0].items[i]);
+        this.addVenueMarker(venues[0].items[i]);
+    }
+}
+
+View.prototype.addVenueMarker = function(venue) {
+    var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
+    var marker = new L.Marker(latLng)
+        .bindPopup(venue['name'])
+        .on('mouseover', function(e) { this.openPopup(); })
+        .on('mouseout', function(e) { this.closePopup(); });
+    this.map.addLayer(marker);
 }
 
 $(function() {
