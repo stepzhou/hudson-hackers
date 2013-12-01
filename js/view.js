@@ -42,14 +42,16 @@ View.prototype.searchForm = function() {
 
 View.prototype.onVenues = function(venues) {
     for (var i = 0; i < venues[0].items.length; i++) {
-        console.log(venues[0].items[i]);
-        this.addVenueMarker(venues[0].items[i]);
+        // console.log(venues[0].items[i]);
+        this.getVenueInformation(venues[0].items[i].id, bind(this.addVenueMarker, this));        
+        // this.addVenueMarker(venues[0].items[i]);
     }
 }
 
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
     venue_name = venue.name;
+    console.log(venue);
     console.log("description:" + venue.description);
     if (!!venue.description) {
         venue_description = venue.description;
@@ -66,6 +68,12 @@ View.prototype.addVenueMarker = function(venue) {
         .on('mouseover', function(e) { this.openPopup(); })
         .on('mouseout', function(e) { this.closePopup(); });
     this.markerLayer.addLayer(marker);
+}
+
+View.prototype.getVenueInformation = function(venueID, callback) { 
+    this.foursquare.makeRequest("venues/" + venueID, function(result) { 
+        callback(result.response.venue); 
+    });
 }
 
 $(function() {
