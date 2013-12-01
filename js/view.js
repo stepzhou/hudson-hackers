@@ -15,8 +15,8 @@ $(function() {
     marker1_title = 'Marker 1';
     marker1_location = [40.77976354892044, -73.97008627653122];
     var marker1 = L.marker(marker1_location, {
-          title:marker1_title, 
-          riseOnHover:true
+        title:marker1_title, 
+        riseOnHover:true
     }).addTo(map);
 
     venue_name = 'Shakespeare Garden';
@@ -29,8 +29,8 @@ $(function() {
     marker2_title = 'Marker 2';
     marker2_location = [40.778667, -73.971635];
     var marker2 = L.marker(marker2_location, {
-          title:marker2_title, 
-          riseOnHover:true
+        title:marker2_title, 
+        riseOnHover:true
     }).addTo(map);
 
     venue_name = 'Bank Rock Bridge';
@@ -40,36 +40,35 @@ $(function() {
     marker2.bindPopup(marker2_text);
 
     $('#search-form').submit(function ()	{
-		var	venue = $('#venue-text').val(),
-			location = $('#location-text').val();
+        var	venue = $('#venue-text').val(),
+        location = $('#location-text').val();
 
         // get location; if null, use a default
         if(!location) { 
-			// implement this later; need to convert longitude/latitude or use appropriate parameter
-			// if(navigator.geolocation) {
-				// navigator.geolocation.getCurrentPosition(searchFourSquare);
-			// }
-			location = 'New York'; // default to New York for now
-		}
+            // implement this later; need to convert longitude/latitude or use appropriate parameter
+            // if(navigator.geolocation) {
+            // navigator.geolocation.getCurrentPosition(searchFourSquare);
+            // }
+            location = 'New York'; // default to New York for now
+        }
 
         // validate venue 
         // implement error-checking
-		if (!!venue) {
-			//make calls to foursquare API
-			searchFoursquare(venue, location);
-		}
+        if (!!venue) {
+            //make calls to foursquare API
+            searchFoursquare(venue, location);
+        }
 
-		return false;
-	});
+        return false;
+    });
 
-	function searchFoursquare(venue, location) {
-		var apiKey = "PF4Q2R5DJRQDBH1KLXPAUJAX0200NRT0S3IHDNDADDGHCRYB";
-		var foursquare = new Foursquare(apiKey, "https://foursquare.com/", "https://api.foursquare.com");
+    function searchFoursquare(venue, location) {
+        var foursquare = new Foursquare(foursquare_client, foursquare_secret, "https://foursquare.com/", "https://api.foursquare.com");
 
-		foursquare.searchNearVenues(location, venue, function(reply) { 
+        foursquare.searchNearVenues(location, venue, function(reply) { 
             console.log("Search location: " + location);
             console.log("Search venue: " + venue);
-			console.log(reply);
-		}); 
-	}
+            console.log(reply);
+        }); 
+    }
 });
