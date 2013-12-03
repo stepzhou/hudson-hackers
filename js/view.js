@@ -1,4 +1,5 @@
 var _markerID = 0;
+var currentItinerary = new Array();
 
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
@@ -15,8 +16,6 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.markerLayer = new L.layerGroup();
     this.markerLayer.addTo(map);
     this.searchForm();
-
-    this.currentItinerary = new Array();
 }
 
 View.prototype.searchForm = function() {
@@ -65,6 +64,9 @@ View.prototype.onVenues = function(venues) {
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
     var venue_name = venue.name;
+    var venue_id = venue.id + "";
+    console.log(venue_id);
+
     if (!!venue.description) {
         var venue_description = '<br/>' + venue.description;
     }
@@ -73,11 +75,11 @@ View.prototype.addVenueMarker = function(venue) {
     }
 
     var venue_link = venue.canonicalUrl;
-    var marker_text = '<div id="'  + (++_markerID) + '">';
+    var marker_text = '<div id="'  + venue_id + '">';
     marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-    marker_text += '<br><button onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '<br><button onclick="addToItinerary(' + venue_id + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
@@ -89,11 +91,11 @@ View.prototype.addVenueMarker = function(venue) {
 }
 
 // TODO: Make object to hold this information
-function addToItinerary (venueID) {
-    console.log("venue " + venueID + " was clicked");
+function addToItinerary(venueID) {
+    console.log("veneue " + venueID + " was clicked");
     $(".sortable").append("<li draggable='true'>" + venueID);
     $(".sortable").sortable();
-    this.currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
+    currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
 }
 
 $(function() {
