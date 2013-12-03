@@ -80,7 +80,7 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<br><button onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
-    var marker = new L.Marker(latLng)
+    var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
         .bindPopup(marker_text)
         //.bindPopup(venue['name'])
         .on('click', function(e) { this.openPopup(); })
@@ -90,7 +90,7 @@ View.prototype.addVenueMarker = function(venue) {
 
 // TODO: Make object to hold this information
 function addToItinerary (venueID) {
-    console.log("veneue " + venueID + " was clicked");
+    console.log("venue " + venueID + " was clicked");
     $(".sortable").append("<li draggable='true'>" + venueID);
     $(".sortable").sortable();
     this.currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
