@@ -113,11 +113,17 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
-    var itinerary = new Array();
+    var time = new Date();
+    var itinerary = {};
+    var venues = new Array();
     $("#accordion .s_panel").each(function(index) {
         console.log("this.id:" + this.id);
-        itinerary.push(currentItinerary[this.id]);
+        venues.push(currentItinerary[this.id]);
     });
+    itinerary['venues'] = venues;
+    itinerary['creation_time'] = time.getTime();
+    itinerary['name'] = "Default";
+    console.log(itinerary);
     var value = $.jStorage.get("all", []);
     value.push(itinerary);
     $.jStorage.set("all", value);
