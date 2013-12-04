@@ -160,10 +160,17 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
-    var itinerary = new Array();
-    $(".sortable li").each(function(index) {
-        itinerary.push(currentItinerary[this.id]);
+    var time = new Date();
+    var itinerary = {};
+    var venues = new Array();
+    $("#accordion .s_panel").each(function(index) {
+        console.log("this.id:" + this.id);
+        venues.push(currentItinerary[this.id]);
     });
+    itinerary['venues'] = venues;
+    itinerary['creation_time'] = time.getTime();
+    itinerary['name'] = "Default";
+    console.log(itinerary);
     var value = $.jStorage.get("all", []);
     value.push(itinerary);
     $.jStorage.set("all", value);
@@ -174,15 +181,15 @@ View.prototype.saveItinerary = function() {
 
 // TODO: Make object to hold this information
 function addToItinerary(venueID) {
-
-    $("#accordion").append("<div class='s_panel' id=" + _markerID + "><h4>" + history[venueID].name + "</h4><div>" + history[venueID].description + "</div></div>");
+    $("#accordion").append("<div class='s_panel' id=" + venueID + "><h4>" + history[venueID].name + "</h4><div>" + history[venueID].description + "</div></div>");
     $("#accordion").accordion("destroy");
     $("#accordion").accordion({
         collapsible: true,
         active: true,
         containment: 'column mapparent',
         height: 'fill',
-        header: 'h4'
+        header: 'h4',
+        heightStyle: "content"
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
