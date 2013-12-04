@@ -18,6 +18,8 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
         maxZoom: 15
     }).addTo(map);
     this.markerLayer = new L.layerGroup();
+    this.saveMarkerLayer = new L.layerGroup();
+    this.saveMarkerLayer.addTo(map);
     this.markerLayer.addTo(map);
     this.searchForm();
     this.saveHook();
@@ -63,6 +65,7 @@ View.prototype.drawMarkers = function(venue) {
     this.markerLayer.clearLayers();
     var center = this.map.getCenter();
     this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
+    this.addItineraryMarkers();
 }
 
 /**
@@ -103,7 +106,51 @@ View.prototype.addVenueMarker = function(venue) {
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
         this.markerLayer.addLayer(marker);
+}
+
+/**
+ * Adds markers for current itinerary items to the map
+ */
+View.prototype.addItineraryMarkers = function() {
+    
+    console.log(currentItinerary);
+
+    for (var key in currentItinerary) {
+        var venue = currentItinerary[key];
+        var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
+        var venue_name = venue.name;
+
+        if (!!venue.description) {
+          var venue_description = '<br/>' + venue.description;
+        }
+        else {
+          var venue_description = "";
+        }
+
+        var venue_link = venue.canonicalUrl;
+        var marker_text = '<div id="'  + (++_markerID) + '">';
+        marker_text += '<b>' + venue_name + '</b>';
+        marker_text += venue_description;
+        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+        marker_text += '</div>'
+
+        var saveIcon = L.icon({
+          iconUrl: 'lib/leaflet/images/save-marker-icon.png',
+          shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+          iconSize: [25,41],
+          shadowSize: [41,41],
+          iconAnchor: [12, 41],
+          shadowAnchor: [12,41]
+        });
+
+        var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
+        .bindPopup(marker_text)
+          //.bindPopup(venue['name'])
+          .on('click', function(e) { this.openPopup(); })
+          .on('unclick', function(e) { this.closePopup(); });
+          this.saveMarkerLayer.addLayer(marker);
     }
+}
 
 /**
  * Set up save button click
