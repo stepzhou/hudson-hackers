@@ -11,6 +11,4 @@ $(function() {
 		};
 		$(".user-itineraries").append("</ul></div>");
 	};
-
-	//$(".user-itineraries").append(allItineraries);
 });
