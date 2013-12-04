@@ -187,7 +187,10 @@ View.prototype.saveItinerary = function() {
 
 // TODO: Make object to hold this information
 function addToItinerary(venueID) {
-    $("#accordion").append("<div class='s_panel' id=" + venueID + "><h4>" + history[venueID].name + "</h4><div>" + history[venueID].description + "</div></div>");
+    item_text = "<div class='s_panel' id=" + venueID + "><h4>"
+    item_text += history[venueID].name + "</h4><div>"
+    item_text += history[venueID].description + "</div></div>"
+    $("#accordion").append(item_text);
     $("#accordion").accordion("destroy");
     $("#accordion").accordion({
         collapsible: true,
