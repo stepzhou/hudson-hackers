@@ -17,7 +17,6 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.markerLayer = new L.layerGroup();
     this.markerLayer.addTo(map);
     this.searchForm();
-
 }
 
 View.prototype.searchForm = function() {
@@ -67,6 +66,7 @@ View.prototype.onVenues = function(venues) {
 View.prototype.addVenueMarker = function(venue) {
     var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
     var venue_name = venue.name;
+
     if (!!venue.description) {
         var venue_description = '<br/>' + venue.description;
     }
@@ -83,7 +83,7 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<br><button onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
-    var marker = new L.Marker(latLng)
+    var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
         .bindPopup(marker_text)
         //.bindPopup(venue['name'])
         .on('click', function(e) { this.openPopup(); })
@@ -92,9 +92,7 @@ View.prototype.addVenueMarker = function(venue) {
 }
 
 // TODO: Make object to hold this information
-function addToItinerary (venueID) {
-    console.log(venueID);
-    console.log("veneue " + history[venueID].name + " was clicked");
+function addToItinerary(venueID) {
     $(".sortable").append("<li draggable='true'>" + history[venueID].name);
     $(".sortable").sortable();
     currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
