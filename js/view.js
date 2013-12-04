@@ -114,7 +114,8 @@ View.prototype.saveHook = function() {
 
 View.prototype.saveItinerary = function() {
     var itinerary = new Array();
-    $("#accordian li").each(function(index) {
+    $("#accordion .s_panel").each(function(index) {
+        console.log("this.id:" + this.id);
         itinerary.push(currentItinerary[this.id]);
     });
     var value = $.jStorage.get("all", []);
