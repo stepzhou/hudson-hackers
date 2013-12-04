@@ -8,19 +8,20 @@ var currentItinerary = {};
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map')
-    .setView([40.78, -73.97], 13);
+        .setView([40.78, -73.97], 13);
     var map = this.map;
-    L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+    var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
         styleId: 96931,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         minZoom: 5,
         maxZoom: 15
     }).addTo(map);
+
     this.markerLayer = new L.layerGroup();
     this.saveMarkerLayer = new L.layerGroup();
-    this.saveMarkerLayer.addTo(map);
     this.markerLayer.addTo(map);
+    this.saveMarkerLayer.addTo(map);
     this.searchForm();
     this.saveHook();
 }
@@ -65,7 +66,6 @@ View.prototype.drawMarkers = function(venue) {
     this.markerLayer.clearLayers();
     var center = this.map.getCenter();
     this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
-    this.addItineraryMarkers();
 }
 
 /**
@@ -97,26 +97,24 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-    marker_text += '<br><button class="btn btn-default btn-sm" onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '<br><button class="btn btn-default btn-sm" onclick="v.addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
     .bindPopup(marker_text)
-        //.bindPopup(venue['name'])
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
         this.markerLayer.addLayer(marker);
 }
 
+
 /**
  * Adds markers for current itinerary items to the map
  */
 View.prototype.addItineraryMarkers = function() {
-    
-    console.log(currentItinerary);
-
     for (var key in currentItinerary) {
         var venue = currentItinerary[key];
+
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
         var venue_name = venue.name;
 
@@ -143,12 +141,12 @@ View.prototype.addItineraryMarkers = function() {
           shadowAnchor: [12,41]
         });
 
-        var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
-        .bindPopup(marker_text)
-          //.bindPopup(venue['name'])
-          .on('click', function(e) { this.openPopup(); })
-          .on('unclick', function(e) { this.closePopup(); });
-          this.saveMarkerLayer.addLayer(marker);
+        var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
+            .bindPopup(marker_text)
+              //.bindPopup(venue['name'])
+              .on('click', function(e) { this.openPopup(); })
+              .on('unclick', function(e) { this.closePopup(); });
+        this.saveMarkerLayer.addLayer(marker);
     }
 }
 
@@ -180,11 +178,23 @@ View.prototype.saveItinerary = function() {
 }
 
 // TODO: Make object to hold this information
-function addToItinerary(venueID) {
-    item_text = "<div class='s_panel' id=" + venueID + "><h4>"
-    item_text += history[venueID].name + "</h4><div>"
-    item_text += history[venueID].description + "</div></div>"
-    $("#accordion").append(item_text);
+View.prototype.addToItinerary = function(venueID) {
+    var params = {}
+    var venue = history[venueID];
+    var html = "<div class='s_panel' id=" + venueID + ">"
+    html += "<h4>" + venue.name + "</h4><div>"
+    if (venue.description)
+        html += venueMetadata(venue.description);
+    if (venue.rating)
+        html += venueMetadata("Rating: " + venue.rating + " / 10.00");
+    if (venue.location.address) {
+        html += venueMetadata(venue.location.address);
+        html += venueMetadata(venue.location.city + ", " + venue.location.state);
+    }
+    if (venue.categories.length > 0)
+        html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
+    html += "</div>";
+    $("#accordion").append(html);
     $("#accordion").accordion("destroy");
     $("#accordion").accordion({
         collapsible: true,
@@ -196,10 +206,13 @@ function addToItinerary(venueID) {
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+    this.addItineraryMarkers();
 }
 
-$(function() {
-    new View(foursquare_client, foursquare_secret, 
-       "https://foursquare.com/", "https://api.foursquare.com",
-       cloudmade_key);
-});
+function venueMetadata(s) {
+    return "<div>" + s + "</div>";
+}
+
+var v = new View(foursquare_client, foursquare_secret, 
+                 "https://foursquare.com/", "https://api.foursquare.com",
+                 cloudmade_key);

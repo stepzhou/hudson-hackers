@@ -2,12 +2,19 @@ html, body, .mapparent {
   height: 100%;
 }
 
-footer {
-  padding-top: 50px;
+footer, .push {
+  height: 4em;
 }
 
 #map {
   height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -4em;
 }
 
 body {
@@ -22,6 +29,11 @@ body {
 .sortable {
   padding-top: 20px;
 }
+
+#accordion {
+  padding-right: 50px;
+}
+
 
 div > div:only-child > form:only-child > button[type="submit"] {
   /* clear any floating implemented by the Twitter Bootstrap framework; you may
