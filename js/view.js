@@ -8,16 +8,19 @@ var currentItinerary = {};
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map')
-    .setView([40.78, -73.97], 13);
+        .setView([40.78, -73.97], 13);
     var map = this.map;
-    L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+    var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
         styleId: 96931,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         minZoom: 5,
         maxZoom: 15
     }).addTo(map);
+
     this.markerLayer = new L.layerGroup();
+    this.saveMarkerLayer = new L.layerGroup();
+    this.saveMarkerLayer.addTo(map);
     this.markerLayer.addTo(map);
     this.searchForm();
     this.saveHook();
@@ -63,6 +66,7 @@ View.prototype.drawMarkers = function(venue) {
     this.markerLayer.clearLayers();
     var center = this.map.getCenter();
     this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
+    this.addItineraryMarkers();
 }
 
 /**
@@ -103,7 +107,51 @@ View.prototype.addVenueMarker = function(venue) {
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
         this.markerLayer.addLayer(marker);
+}
+
+// L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+/**
+ * Adds markers for current itinerary items to the map
+ */
+View.prototype.addItineraryMarkers = function() {
+    for (var key in currentItinerary) {
+        var venue = currentItinerary[key];
+
+        var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
+        var venue_name = venue.name;
+
+        if (!!venue.description) {
+          var venue_description = '<br/>' + venue.description;
+        }
+        else {
+          var venue_description = "";
+        }
+
+        var venue_link = venue.canonicalUrl;
+        var marker_text = '<div id="'  + (++_markerID) + '">';
+        marker_text += '<b>' + venue_name + '</b>';
+        marker_text += venue_description;
+        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+        marker_text += '</div>'
+
+        var saveIcon = L.icon({
+          iconUrl: 'lib/leaflet/images/save-marker-icon.png',
+          shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+          iconSize: [25,41],
+          shadowSize: [41,41],
+          iconAnchor: [12, 41],
+          shadowAnchor: [12,41]
+        });
+
+        var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
+            .bindPopup(marker_text)
+              //.bindPopup(venue['name'])
+              .on('click', function(e) { this.openPopup(); })
+              .on('unclick', function(e) { this.closePopup(); });
+        this.saveMarkerLayer.addLayer(marker);
     }
+}
 
 /**
  * Set up save button click
@@ -137,13 +185,11 @@ function addToItinerary(venueID) {
     var params = {}
     var venue = history[venueID];
     var html = "<div class='s_panel' id=" + venueID + ">"
-    console.log(venue);
     html += "<h4>" + venue.name + "</h4><div>"
-    console.log(venue.description);
     if (venue.description)
         html += venueMetadata(venue.description);
     if (venue.rating)
-        html += venueMetadata("Rating: " + venue.rating);
+        html += venueMetadata("Rating: " + venue.rating + " / 10.00");
     if (venue.location.address) {
         html += venueMetadata(venue.location.address);
         html += venueMetadata(venue.location.city + ", " + venue.location.state);
