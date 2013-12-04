@@ -7,16 +7,18 @@ var currentItinerary = {};
  */
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
-    this.map = new L.map('map')
+    this.map = new L.map('map', layers:[])
     .setView([40.78, -73.97], 13);
     var map = this.map;
-    L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+    var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
         styleId: 96931,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         minZoom: 5,
         maxZoom: 15
-    }).addTo(map);
+    });
+
+    //addTo
     this.markerLayer = new L.layerGroup();
     this.saveMarkerLayer = new L.layerGroup();
     this.saveMarkerLayer.addTo(map);
@@ -108,15 +110,19 @@ View.prototype.addVenueMarker = function(venue) {
         this.markerLayer.addLayer(marker);
 }
 
+// L.control.layers(baseMaps, overlayMaps).addTo(map);
+
 /**
  * Adds markers for current itinerary items to the map
  */
 View.prototype.addItineraryMarkers = function() {
     
-    console.log(currentItinerary);
+    var currentPlaces = [];
 
     for (var key in currentItinerary) {
         var venue = currentItinerary[key];
+        currentPlaces[currentPlaces.length] = venue;
+
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
         var venue_name = venue.name;
 
