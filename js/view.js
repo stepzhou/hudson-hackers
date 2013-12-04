@@ -5,7 +5,7 @@ var currentItinerary = {};
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map')
-        .setView([40.78, -73.97], 13);
+    .setView([40.78, -73.97], 13);
     var map = this.map;
     L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
@@ -24,7 +24,7 @@ View.prototype.searchForm = function() {
     $('#search-form').submit(function () {
         history = {};
         var venue = $('#venue-text').val(),
-            location = $('#location-text').val();
+        location = $('#location-text').val();
 
         // TODO: validate venues
         // get location; if null, use a default for now
@@ -40,15 +40,15 @@ View.prototype.searchForm = function() {
             //     }
             // });
 
-            that.foursquare.geocode(location, function(reply) {
-                var locCenter = reply[0]['feature']['geometry']['center'];
-                that.map.setView(locCenter, 13);
-                that.drawMarkers(venue);
-            });
-        }
-
-        return false;
+    that.foursquare.geocode(location, function(reply) {
+        var locCenter = reply[0]['feature']['geometry']['center'];
+        that.map.setView(locCenter, 13);
+        that.drawMarkers(venue);
     });
+}
+
+return false;
+});
 }
 
 View.prototype.drawMarkers = function(venue) {
@@ -84,25 +84,34 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
-        .bindPopup(marker_text)
+    .bindPopup(marker_text)
         //.bindPopup(venue['name'])
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
-    this.markerLayer.addLayer(marker);
-}
+        this.markerLayer.addLayer(marker);
+    }
 
 // TODO: Make object to hold this information
 function addToItinerary(venueID) {
-    $(".sortable").append("<li draggable='true' id=" + venueID + ">" + history[venueID].name);
-    $(".sortable").sortable();
+
+    $("#accordion").append("<div class='s_panel' id=" + _markerID + "><h4>" + history[venueID].name + "</h4><div>" + history[venueID].description + "</div></div>");
+    $("#accordion").accordion("destroy");
+    $("#accordion").accordion({
+        collapsible: true,
+        active: true,
+        containment: 'column mapparent',
+        height: 'fill',
+        header: 'h4'
+    }).sortable({items: '.s_panel'});
+
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
     console.log(currentItinerary);
 }
 
 $(function() {
     new View(foursquare_client, foursquare_secret, 
-             "https://foursquare.com/", "https://api.foursquare.com",
-             cloudmade_key);
+       "https://foursquare.com/", "https://api.foursquare.com",
+       cloudmade_key);
 });
 
 
@@ -121,25 +130,25 @@ function onInitFs(fs) {
     // // fileEntry.name == 'log.txt'
     // // fileEntry.fullPath == '/log.txt' 
     // }, onError);
-    fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
+fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
 
         // Create a FileWriter object for our FileEntry (log.txt).
         fileEntry.createWriter(function(fileWriter) {
 
           fileWriter.onwriteend = function(e) {
             console.log('Write completed.');
-          };
+        };
 
-          fileWriter.onerror = function(e) {
+        fileWriter.onerror = function(e) {
             console.log('Write failed: ' + e.toString());
-          };
+        };
 
           // Create a new Blob and write it to log.txt.
           var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
 
           fileWriter.write(blob);
 
-        }, onError);
+      }, onError);
 
     }, onError);
 
@@ -148,27 +157,27 @@ function errorHandler(e) {
     var msg = '';
 
     switch (e.code) {
-    case FileError.QUOTA_EXCEEDED_ERR:
+        case FileError.QUOTA_EXCEEDED_ERR:
         msg = 'QUOTA_EXCEEDED_ERR';
         break;
-    case FileError.NOT_FOUND_ERR:
+        case FileError.NOT_FOUND_ERR:
         msg = 'NOT_FOUND_ERR';
         break;
-    case FileError.SECURITY_ERR:
+        case FileError.SECURITY_ERR:
         msg = 'SECURITY_ERR';
         break;
-    case FileError.INVALID_MODIFICATION_ERR:
+        case FileError.INVALID_MODIFICATION_ERR:
         msg = 'INVALID_MODIFICATION_ERR';
         break;
-    case FileError.INVALID_STATE_ERR:
+        case FileError.INVALID_STATE_ERR:
         msg = 'INVALID_STATE_ERR';
         break;
-    default:
+        default:
         msg = 'Unknown Error';
-    break;
-};
+        break;
+    };
 
-  console.log('Error: ' + msg);
+    console.log('Error: ' + msg);
 }
 
 //PERSISTENT STORAGE - HTML5ROCKS.COM
