@@ -102,13 +102,11 @@ View.prototype.addVenueMarker = function(venue) {
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
     .bindPopup(marker_text)
-        //.bindPopup(venue['name'])
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
         this.markerLayer.addLayer(marker);
 }
 
-// L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 /**
  * Adds markers for current itinerary items to the map
