@@ -96,7 +96,7 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-    marker_text += '<br><button onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '<br><button class="btn btn-default btn-sm" onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
