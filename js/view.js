@@ -134,7 +134,24 @@ View.prototype.saveItinerary = function() {
 
 // TODO: Make object to hold this information
 function addToItinerary(venueID) {
-    $("#accordion").append("<div class='s_panel' id=" + venueID + "><h4>" + history[venueID].name + "</h4><div>" + history[venueID].description + "</div></div>");
+    var params = {}
+    var venue = history[venueID];
+    var html = "<div class='s_panel' id=" + venueID + ">"
+    console.log(venue);
+    html += "<h4>" + venue.name + "</h4><div>"
+    console.log(venue.description);
+    if (venue.description)
+        html += venueMetadata(venue.description);
+    if (venue.rating)
+        html += venueMetadata("Rating: " + venue.rating);
+    if (venue.location.address) {
+        html += venueMetadata(venue.location.address);
+        html += venueMetadata(venue.location.city + ", " + venue.location.state);
+    }
+    if (venue.categories.length > 0)
+        html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
+    html += "</div>";
+    $("#accordion").append(html);
     $("#accordion").accordion("destroy");
     $("#accordion").accordion({
         collapsible: true,
@@ -146,6 +163,10 @@ function addToItinerary(venueID) {
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+}
+
+function venueMetadata(s) {
+    return "<div>" + s + "</div>";
 }
 
 $(function() {
