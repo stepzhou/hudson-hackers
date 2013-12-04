@@ -1,6 +1,6 @@
 var _markerID = 0;
 var history = {};
-var currentItinerary = new Array();
+var currentItinerary = {};
 
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
@@ -93,9 +93,10 @@ View.prototype.addVenueMarker = function(venue) {
 
 // TODO: Make object to hold this information
 function addToItinerary(venueID) {
-    $(".sortable").append("<li draggable='true'>" + history[venueID].name);
+    $(".sortable").append("<li draggable='true' id=" + venueID + ">" + history[venueID].name);
     $(".sortable").sortable();
-    currentItinerary[currentItinerary.length] = venueID; // adds selected venue to array 
+    currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+    console.log(currentItinerary);
 }
 
 $(function() {
