@@ -20,8 +20,8 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
 
     this.markerLayer = new L.layerGroup();
     this.saveMarkerLayer = new L.layerGroup();
-    this.saveMarkerLayer.addTo(map);
     this.markerLayer.addTo(map);
+    this.saveMarkerLayer.addTo(map);
     this.searchForm();
     this.saveHook();
 }
@@ -66,7 +66,6 @@ View.prototype.drawMarkers = function(venue) {
     this.markerLayer.clearLayers();
     var center = this.map.getCenter();
     this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
-    this.addItineraryMarkers();
 }
 
 /**
@@ -98,7 +97,7 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-    marker_text += '<br><button class="btn btn-default btn-sm" onclick="addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '<br><button class="btn btn-default btn-sm" onclick="v.addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
@@ -181,7 +180,7 @@ View.prototype.saveItinerary = function() {
 }
 
 // TODO: Make object to hold this information
-function addToItinerary(venueID) {
+View.prototype.addToItinerary = function(venueID) {
     var params = {}
     var venue = history[venueID];
     var html = "<div class='s_panel' id=" + venueID + ">"
@@ -209,14 +208,13 @@ function addToItinerary(venueID) {
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+    this.addItineraryMarkers();
 }
 
 function venueMetadata(s) {
     return "<div>" + s + "</div>";
 }
 
-$(function() {
-    new View(foursquare_client, foursquare_secret, 
-       "https://foursquare.com/", "https://api.foursquare.com",
-       cloudmade_key);
-});
+var v = new View(foursquare_client, foursquare_secret, 
+                 "https://foursquare.com/", "https://api.foursquare.com",
+                 cloudmade_key);
