@@ -115,10 +115,16 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
-    console.log(JSON.stringify(currentItinerary));
-    $.cookie.json = true;
-    $.cookie('dummy', JSON.stringify(currentItinerary));
-    console.log(JSON.parse($.cookie('dummy')));
+    var itinerary = new Array();
+    $(".sortable li").each(function(index) {
+        itinerary.push(currentItinerary[this.id]);
+    });
+    var value = $.jStorage.get("all", []);
+    value.push(itinerary);
+    $.jStorage.set("all", value);
+    // $.cookie.json = true;
+    // $.cookie('dummy', JSON.stringify(currentItinerary));
+    // console.log(JSON.parse($.cookie('dummy')));
 }
 
 // TODO: Make object to hold this information
