@@ -14,8 +14,8 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
         key: cloudmadeKey,
         styleId: 96931,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-        minZoom: 11,
-        maxZoom: 18
+        minZoom: 5,
+        maxZoom: 15
     }).addTo(map);
     this.markerLayer = new L.layerGroup();
     this.markerLayer.addTo(map);
