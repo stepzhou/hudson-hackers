@@ -5,3 +5,5 @@ var cloudmade_key = "";
 
 var foursquare_client = "",
     foursquare_secret = "";
+
+var mapquest_key = "";

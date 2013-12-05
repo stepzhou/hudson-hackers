@@ -30,11 +30,6 @@ body {
   padding-top: 20px;
 }
 
-#accordion {
-  padding-right: 50px;
-}
-
-
 div > div:only-child > form:only-child > button[type="submit"] {
   /* clear any floating implemented by the Twitter Bootstrap framework; you may
      want to use the legacy clearfix method to make this work on all browsers */

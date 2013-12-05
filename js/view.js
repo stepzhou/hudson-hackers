@@ -7,8 +7,11 @@ var currentItinerary = {};
  */
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
-    this.map = new L.map('map')
-        .setView([40.78, -73.97], 13);
+    this.map = new L.map('map', {
+        layers: MQ.mapLayer(),
+        center: [40.78, -73.97],
+        zoom: 13
+    });
     var map = this.map;
     var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
@@ -20,10 +23,13 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
 
     this.markerLayer = new L.layerGroup();
     this.saveMarkerLayer = new L.layerGroup();
+    this.routeLayer = new L.layerGroup();
     this.markerLayer.addTo(map);
     this.saveMarkerLayer.addTo(map);
+    this.routeLayer.addTo(map);
     this.searchForm();
     this.saveHook();
+    this.toggleHook();
 }
 
 /**
@@ -157,6 +163,13 @@ View.prototype.saveHook = function() {
     $('#save').on('click', this.saveItinerary);
 }
 
+/**
+ * Dummy toggle button
+ */
+View.prototype.toggleHook = function() {
+    $('#toggle').on('click', bind(this.routeDirections, this));
+}
+
 View.prototype.saveItinerary = function() {
     var time = new Date();
     var itinerary = {};
@@ -195,18 +208,36 @@ View.prototype.addToItinerary = function(venueID) {
         html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
     html += "</div>";
     $("#accordion").append(html);
-    $("#accordion").accordion("destroy");
-    $("#accordion").accordion({
+    // $("#accordion").accordion("destroy");
+    $("#accordion #" + venueID).accordion({
         collapsible: true,
         active: true,
         containment: 'column mapparent',
-        height: 'fill',
         header: 'h4',
         heightStyle: "content"
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
     this.addItineraryMarkers();
+}
+
+View.prototype.routeDirections = function() {
+    dir = MQ.routing.directions();
+    var locations = [];
+    $("#accordion div.s_panel").each(function(index) {
+        var place = currentItinerary[this.id];
+        locations.push({latLng: {lat: place.location.lat, lng: place.location.lng}});
+    }); 
+    console.log(locations);
+
+    dir.route({
+        locations: locations
+    });
+    this.routeLayer.clearLayers();
+    this.routeLayer.addLayer(MQ.routing.routeLayer({
+        directions: dir,
+        fitBounds: false
+    }));
 }
 
 function venueMetadata(s) {
