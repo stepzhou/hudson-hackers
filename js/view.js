@@ -30,6 +30,17 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.searchForm();
     this.saveHook();
     this.toggleHook();
+    this.preloadForm();
+}
+
+View.prototype.preloadForm = function() { 
+    var link = document.URL;
+
+    if (link.match('#')) {
+
+        
+    }
+
 }
 
 /**
