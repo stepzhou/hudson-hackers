@@ -189,20 +189,30 @@ View.prototype.saveItinerary = function() {
 View.prototype.addToItinerary = function(venueID) {
     var params = {}
     var venue = history[venueID];
-    var html = "<div class='s_panel' id=" + venueID + ">"
-    html += "<h4>" + venue.name + "</h4><div>"
+    var html = $('<div/>', {
+        class: 's_panel',
+        id: "" + venueID
+    }).appendTo('#accordion');
+
+    $('<h4/>', { text: venue.name }).appendTo(html);
+    var accordionDiv = $('<div/>').appendTo(html);
     if (venue.description)
-        html += venueMetadata(venue.description);
+        $('<div/>', { 
+            text: venue.description,
+            class: 'description'}).appendTo(accordionDiv);
     if (venue.rating)
-        html += venueMetadata("Rating: " + venue.rating + " / 10.00");
+        $('<div/>', { 
+            text: "Rating: " + venue.rating + " / 10.00",
+            class: 'rating'}).appendTo(accordionDiv);
     if (venue.location.address) {
-        html += venueMetadata(venue.location.address);
-        html += venueMetadata(venue.location.city + ", " + venue.location.state);
+        $('<div/>', { text: venue.location.address }).appendTo(accordionDiv);
+        $('<div/>', { text: venue.location.city + ", " + venue.location.state }).appendTo(accordionDiv);
     }
     if (venue.categories.length > 0)
-        html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
-    html += "</div>";
-    $("#accordion").append(html);
+        $('<div/>', { 
+            text: 'Categories: ' + venue.categories.map(function(x) { return x.name; }).join(", "),
+            class: 'categories'}).appendTo(accordionDiv);
+
     // $("#accordion").accordion("destroy");
     $("#accordion #" + venueID).accordion({
         collapsible: true,
