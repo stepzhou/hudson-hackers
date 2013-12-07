@@ -51,8 +51,11 @@ View.prototype.preloadForm = function() {
             }
         }
 
+        var centerVenue = itinerary.venues[0];
+
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
+            console.log(venue);
             currentItinerary[venue.id] = venue;
 
             var html = "<div class='s_panel' id=" + venue.id + ">"
@@ -79,6 +82,7 @@ View.prototype.preloadForm = function() {
                 }).sortable({items: '.s_panel'});
         }
 
+        this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
         this.addItineraryMarkers();   
     }
 }
@@ -111,6 +115,7 @@ View.prototype.searchForm = function() {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
                 that.drawMarkers(venue);
+                console.log(locCenter.lat);
             });
         }
         return false;
