@@ -16,10 +16,21 @@ var itineraryOptions = '<div class="btn-group">';
 			$(".user-itineraries").append("<li>"+ singleVenue.name + "</li>");
 		};
 
-		itineraryOptions += '<ul class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a></li><li><a href="#">Clone</a></li>';
-		itineraryOptions += '<li><a href="#">Delete</a></li>';
+		itineraryOptions += '<ul class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
+		//itineraryOptions += '</li><li><a href="#">Clone</a></li>';
+		//itineraryOptions += '<li><a href="#deleted_' + singleItinerary.name + '">Delete</a></li>';
+		itineraryOptions += '<li class="divider"></li><li><button onclick="cloneItinerary('+ singleItinerary.name +')" class="btn btn-default" id="clone-button">Clone</button></li>';
+		itineraryOptions += '<li class="divider"></li><li><button onclick="deleteItinerary('+ singleItinerary.name +')" class="btn btn-default" id="delete-button">Delete</button></li>';
 		itineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></ul></div>';
 
 		$(".user-itineraries").append("</ul> " + itineraryOptions + " </div>");
 	};
 });
+
+function deleteItinerary(itineraryName) {
+	console.log("We will delete " + itineraryName);
+}
+function cloneItinerary(itineraryName) {
+	console.log("We will clone " + itineraryName);
+}
+
