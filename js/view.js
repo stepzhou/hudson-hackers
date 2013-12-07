@@ -79,34 +79,56 @@ View.prototype.preloadForm = function() {
             }
         }
 
+        var centerVenue = itinerary.venues[0];
+
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
             currentItinerary[venue.id] = venue;
 
-            var html = "<div class='s_panel' id=" + venue.id + ">"
-            html += "<h4>" + venue.name + "</h4><div>"
+            var html = $('<div/>', {
+                class: 's_panel',
+                id: "" + venue.id
+            }).appendTo('#accordion');
+
+            $('<h4/>', { text: venue.name }).appendTo(html);
+            var accordionDiv = $('<div/>').appendTo(html);
+
             if (venue.description)
-                html += venueMetadata(venue.description);
+                $('<div/>', { 
+                    text: venue.description,
+                    class: 'description'}).appendTo(accordionDiv);
+
+            if (venue.location.address) 
+                $('<div/>', { 
+                    text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
+                    class: 'address'}).appendTo(accordionDiv);
+
             if (venue.rating)
-                html += venueMetadata("Rating: " + venue.rating + " / 10.00");
-            if (venue.location.address) {
-                html += venueMetadata(venue.location.address);
-                html += venueMetadata(venue.location.city + ", " + venue.location.state);
-            }
+                $('<div/>', {
+                    text: venue.rating + ' / 10 rating',
+                    class: 'rating'
+                }).appendTo(accordionDiv);
+
+            $('<div/>', {
+                text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
+                class: 'stats' }).appendTo(accordionDiv);
+
             if (venue.categories.length > 0)
-                html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
-                html += "</div>";
-                $("#accordion").append(html);
-                // $("#accordion").accordion("destroy");
-                $("#accordion #" + venue.id).accordion({
-                    collapsible: true,
-                    active: true,
-                    containment: 'column mapparent',
-                    header: 'h4',
-                    heightStyle: "content"
-                }).sortable({items: '.s_panel'});
+                $('<div/>', { 
+                    text: venue.categories.map(function(x) { return x.name; }).join(", "),
+                    class: 'categories'}).appendTo(accordionDiv);
+
+            // $("#accordion").accordion("destroy");
+            $("#accordion #" + venue.id).accordion({
+                collapsible: true,
+                active: true,
+                containment: 'column mapparent',
+                header: 'h4',
+                heightStyle: "content"
+            }).sortable({items: '.s_panel'});
         }
 
+        this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
         this.addItineraryMarkers();   
     }
 }
@@ -124,21 +146,15 @@ View.prototype.searchForm = function() {
         // TODO: validate venues
         // get location; if null, use a default for now
         if(!location) { 
-            location = 'New York'; // default to New York for now
+            location = 'New York';
             that.drawMarkers(venue);
         }
         else {
-            // TODO: allow user to select from multiple options instead of hardcode
-            // that.foursquare.geocode(location, function(reply) {
-            //     for (var i = 0; i < reply.length; i++) {
-            //         console.log(reply[i]);
-            //     }
-            // });
-
             that.foursquare.geocode(location, function(reply) {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
                 that.drawMarkers(venue);
+                console.log(locCenter.lat);
             });
         }
         return false;
@@ -243,23 +259,41 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
+
+    var link = document.URL;
+    var value = $.jStorage.get("all", []);
+
     var time = new Date();
     var itinerary = {};
     var venues = new Array();
     $("#accordion .s_panel").each(function(index) {
-        console.log("this.id:" + this.id);
         venues.push(currentItinerary[this.id]);
     });
     itinerary['venues'] = venues;
     itinerary['creation_time'] = time.getTime();
     itinerary['name'] = "Default";
-    console.log(itinerary);
-    var value = $.jStorage.get("all", []);
-    value.push(itinerary);
+
+    //if the itinerary is being edited,
+    //we replace the previously saved itinerary
+    //with the updated itinerary
+    if (link.match('#')) {
+        for (var i = 0; i < value.length; i++) {
+            if (value[i].name === link.split("#")[1]){
+                value.splice(i, 1, itinerary);
+            }
+        }
+            
+    }
+    //else, this is a new itinerary, and push it
+    //to the end of our locally stored object
+    else {
+
+        value.push(itinerary);
+        // $.cookie.json = true;
+        // $.cookie('dummy', JSON.stringify(currentItinerary));
+        // console.log(JSON.parse($.cookie('dummy')));
+    }
     $.jStorage.set("all", value);
-    // $.cookie.json = true;
-    // $.cookie('dummy', JSON.stringify(currentItinerary));
-    // console.log(JSON.parse($.cookie('dummy')));
 }
 
 // TODO: Make object to hold this information
@@ -273,21 +307,30 @@ View.prototype.addToItinerary = function(venueID) {
 
     $('<h4/>', { text: venue.name }).appendTo(html);
     var accordionDiv = $('<div/>').appendTo(html);
+
     if (venue.description)
         $('<div/>', { 
             text: venue.description,
             class: 'description'}).appendTo(accordionDiv);
-    if (venue.rating)
+
+    if (venue.location.address) 
         $('<div/>', { 
-            text: "Rating: " + venue.rating + " / 10.00",
-            class: 'rating'}).appendTo(accordionDiv);
-    if (venue.location.address) {
-        $('<div/>', { text: venue.location.address }).appendTo(accordionDiv);
-        $('<div/>', { text: venue.location.city + ", " + venue.location.state }).appendTo(accordionDiv);
-    }
+            text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
+            class: 'address'}).appendTo(accordionDiv);
+
+    if (venue.rating)
+        $('<div/>', {
+            text: venue.rating + ' / 10 rating',
+            class: 'rating'
+        }).appendTo(accordionDiv);
+
+    $('<div/>', {
+        text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
+        class: 'stats' }).appendTo(accordionDiv);
+
     if (venue.categories.length > 0)
         $('<div/>', { 
-            text: 'Categories: ' + venue.categories.map(function(x) { return x.name; }).join(", "),
+            text: venue.categories.map(function(x) { return x.name; }).join(", "),
             class: 'categories'}).appendTo(accordionDiv);
 
     // $("#accordion").accordion("destroy");
