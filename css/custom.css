@@ -93,3 +93,7 @@ div > div:only-child > form:only-child > button[type="submit"] {
 #ibuttons {
   height: 10%;
 }
+
+.navbar-collapse {
+  margin-right:50%;
+}
