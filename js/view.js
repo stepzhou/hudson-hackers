@@ -126,10 +126,11 @@ View.prototype.preloadForm = function() {
                 header: 'h4',
                 heightStyle: "content"
             }).sortable({items: '.s_panel'});
+            
+            this.addItineraryMarker(venue.id);  
         }
 
         this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
-        this.addItineraryMarkers();   
     }
 }
 
@@ -212,43 +213,42 @@ View.prototype.addVenueMarker = function(venue) {
 /**
  * Adds markers for current itinerary items to the map
  */
-View.prototype.addItineraryMarkers = function() {
-    for (var key in currentItinerary) {
-        var venue = currentItinerary[key];
+View.prototype.addItineraryMarker = function(key) {
+    
+    var venue = currentItinerary[key];
 
-        var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
-        var venue_name = venue.name;
+    var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
+    var venue_name = venue.name;
 
-        if (!!venue.description) {
-          var venue_description = '<br/>' + venue.description;
-        }
-        else {
-          var venue_description = "";
-        }
-
-        var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + (++_markerID) + '">';
-        marker_text += '<b>' + venue_name + '</b>';
-        marker_text += venue_description;
-        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-        marker_text += '</div>'
-
-        var saveIcon = L.icon({
-          iconUrl: 'lib/leaflet/images/save-marker-icon.png',
-          shadowUrl: 'lib/leaflet/images/marker-shadow.png',
-          iconSize: [25,41],
-          shadowSize: [41,41],
-          iconAnchor: [12, 41],
-          shadowAnchor: [12,41]
-        });
-
-        var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
-            .bindPopup(marker_text)
-              //.bindPopup(venue['name'])
-              .on('click', function(e) { this.openPopup(); })
-              .on('unclick', function(e) { this.closePopup(); });
-        this.saveMarkerLayer.addLayer(marker);
+    if (!!venue.description) {
+      var venue_description = '<br/>' + venue.description;
     }
+    else {
+      var venue_description = "";
+    }
+
+    var venue_link = venue.canonicalUrl;
+    var marker_text = '<div id="'  + (key) + '">';
+    marker_text += '<b>' + venue_name + '</b>';
+    marker_text += venue_description;
+    marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+    marker_text += '</div>'
+
+    var saveIcon = L.icon({
+      iconUrl: 'lib/leaflet/images/save-marker-icon.png',
+      shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+      iconSize: [25,41],
+      shadowSize: [41,41],
+      iconAnchor: [12, 41],
+      shadowAnchor: [12,41]
+    });
+
+    var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
+        .bindPopup(marker_text)
+          //.bindPopup(venue['name'])
+          .on('click', function(e) { this.openPopup(); })
+          .on('unclick', function(e) { this.closePopup(); });
+    this.saveMarkerLayer.addLayer(marker);
 }
 
 /**
@@ -351,7 +351,7 @@ View.prototype.addToItinerary = function(venueID) {
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
-    this.addItineraryMarkers();
+    this.addItineraryMarker(venueID);
 }
 
 /**
