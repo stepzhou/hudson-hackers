@@ -134,6 +134,7 @@ $(document).ready(function () {
         var that = this;
         $('#search-form').submit(function () {
             history = {};
+            $("#search-results li").remove();
             var venue = $('#venue-text').val(),
             location = $('#location-text').val();
 
@@ -172,9 +173,19 @@ $(document).ready(function () {
     }
 
     /**
+     * Adds venue results to sliding side panel
+     */
+    View.prototype.addSearchResult = function(venue, venueID) {
+        $("#search-results")
+            .append($('<li/>', {text: venue.name})
+            .on('click', { id: venueID }, bind(this.addVenueToItineraryEvent, this)));
+    }
+
+    /**
      * Adds venue markers to the map
      */
     View.prototype.addVenueMarker = function(venue) {
+
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
         var venue_name = venue.name;
 
@@ -201,6 +212,8 @@ $(document).ready(function () {
             .appendTo(markerText);
 
         history[_markerID] = venue;
+
+        this.addSearchResult(venue, _markerID);
 
         var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
             .bindPopup(markerText[0])
