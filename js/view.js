@@ -9,7 +9,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map', {
         layers: MQ.mapLayer(),
-        center: [40.78, -73.97],
+        center: [40.78, -73.97], // default to New York at start
         zoom: 13
     });
     var map = this.map;
@@ -37,9 +37,12 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.splashForm();
 }
 
+/**
+ * Connects the splash page to the view page for search
+ */
 View.prototype.splashForm = function() {
     var text = window.location.search.substr(1).split("&");
-    if(text[0].length > 0) {
+    if (text[0].length > 0) {
         var venue_string = text[0];
         var location_string = text[1];
 
@@ -47,12 +50,13 @@ View.prototype.splashForm = function() {
         var venue = venue_string.split("=")[1];
 
         // get location
-        if(!location_string) { 
+        if (!location_string) { 
             var location = 'New York'; // default to New York if no location given
         } else { 
             var location = location_string.split("=")[1];
         }
         
+        // get the geocode for the location and update the map
         var that = this;
         this.foursquare.geocode(location, function(reply) {
             var locCenter = reply[0]['feature']['geometry']['center'];
@@ -62,6 +66,9 @@ View.prototype.splashForm = function() {
     }
 }
 
+/**
+ * Connects the manage page to the view page for saved itineraries
+ */
 View.prototype.preloadForm = function() { 
     var link = document.URL;
 
@@ -146,11 +153,10 @@ View.prototype.searchForm = function() {
 
         // TODO: validate venues
         // get location; if null, use a default for now
-        if(!location) { 
+        if (!location) { 
             location = 'New York';
             that.drawMarkers(venue);
-        }
-        else {
+        } else {
             that.foursquare.geocode(location, function(reply) {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
@@ -188,8 +194,7 @@ View.prototype.addVenueMarker = function(venue) {
 
     if (!!venue.description) {
         var venue_description = '<br/>' + venue.description;
-    }
-    else {
+    } else {
         var venue_description = "";
     }
 
@@ -276,26 +281,22 @@ View.prototype.saveItinerary = function() {
 
     if (!itName) {
         itinerary['name'] = "Default";
-    }
-    else {
+    } else {
         itinerary['name'] = itName;
     }
 
-    //if the itinerary is being edited,
-    //we replace the previously saved itinerary
-    //with the updated itinerary
+    // if the itinerary is being edited,
+    // we replace the previously saved itinerary
+    // with the updated itinerary
     if (link.match('#')) {
         for (var i = 0; i < value.length; i++) {
-            if (value[i].name === link.split("#")[1]){
+            if (value[i].name === link.split("#")[1]) {
                 value.splice(i, 1, itinerary);
             }
         }
-            
-    }
-    //else, this is a new itinerary, and push it
-    //to the end of our locally stored object
-    else {
-
+    } else {
+        // else, this is a new itinerary, and push it
+        // to the end of our locally stored object
         value.push(itinerary);
         // $.cookie.json = true;
         // $.cookie('dummy', JSON.stringify(currentItinerary));
@@ -319,12 +320,14 @@ View.prototype.addToItinerary = function(venueID) {
     if (venue.description)
         $('<div/>', { 
             text: venue.description,
-            class: 'description'}).appendTo(accordionDiv);
+            class: 'description'
+        }).appendTo(accordionDiv);
 
     if (venue.location.address) 
         $('<div/>', { 
             text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
-            class: 'address'}).appendTo(accordionDiv);
+            class: 'address'
+        }).appendTo(accordionDiv);
 
     if (venue.rating)
         $('<div/>', {
@@ -334,12 +337,14 @@ View.prototype.addToItinerary = function(venueID) {
 
     $('<div/>', {
         text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
-        class: 'stats' }).appendTo(accordionDiv);
+        class: 'stats'
+    }).appendTo(accordionDiv);
 
     if (venue.categories.length > 0)
         $('<div/>', { 
             text: venue.categories.map(function(x) { return x.name; }).join(", "),
-            class: 'categories'}).appendTo(accordionDiv);
+            class: 'categories'
+        }).appendTo(accordionDiv);
 
     // $("#accordion").accordion("destroy");
     $("#accordion #" + venueID).accordion({
@@ -361,6 +366,9 @@ View.prototype.routeHook = function() {
     $('#route').on('click', bind(this.routeDirections, this));
 }
 
+/**
+ * Draw Route for itinerary
+ */
 View.prototype.routeDirections = function() {
     dir = MQ.routing.directions();
 
