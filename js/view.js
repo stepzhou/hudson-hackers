@@ -47,6 +47,7 @@ $(document).ready(function () {
         this.expandHook();
         this.preloadForm();
         this.splashForm();
+        this.setSearchResultPanel();
     }
 
     /**
@@ -185,6 +186,7 @@ $(document).ready(function () {
             $('<div/>', { text: venue.description }).appendTo(markerText);
 
         $('<div/>')
+            .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
             .append($('<a/>', { text: 'Foursquare', href: venue.canonicalUrl } ))
             .appendTo(markerText);
 
@@ -428,10 +430,26 @@ $(document).ready(function () {
         $("#accordion div.s_panel").accordion("option", "active", 0);
     }
 
+    View.prototype.setSearchResultPanel = function() {
+        $("#search-results").sidebar({
+        position:"right",
+        open:"click",
+        // callback:{
+        // item : {
+        // enter : function(){
+        // $(this).find("a").animate({color:"red"}, 250);
+        // },
+        // leave : function(){
+        // $(this).find("a").animate({color:"white"}, 250);
+        // }
+        // }
+        // }
+        });
+    }
+
     $(function() {
         var v = new View(foursquare_client, foursquare_secret, 
                          "https://foursquare.com/", "https://api.foursquare.com",
                          cloudmade_key);
     });
-
 });

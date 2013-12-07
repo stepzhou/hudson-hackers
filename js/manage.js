@@ -49,5 +49,26 @@ function deleteItinerary(itineraryName) {
 }
 function cloneItinerary(itineraryName) {
 	console.log("We will clone " + itineraryName);
+	var allItineraries = $.jStorage.get("all", []);
+	var singleItinerary;
+	var singleVenue;
+
+	for (var i = 0; i < allItineraries.length; i++) {
+		singleItinerary = allItineraries[i];
+
+		if (singleItinerary.name === itineraryName) {
+			var copyItinerary = {};
+			copyItinerary['venues'] = singleItinerary.venues.slice(0);
+			copyItinerary['creation_time'] = (new Date()).getTime();
+			copyItinerary['name'] = "Clone Of " + singleItinerary.name;
+
+			// allItineraries.splice(allItineraries.length, 1, copyItinerary);
+			allItineraries.push(copyItinerary);
+			$.jStorage.set("all", allItineraries);
+			break;
+		}
+	}
+
+	location.reload();
 }
 
