@@ -38,6 +38,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.expandHook();
     this.preloadForm();
     this.splashForm();
+    this.setSearchResultPanel();
 }
 
 /**
@@ -390,6 +391,23 @@ View.prototype.expandHook = function() {
 
 View.prototype.expandAll = function() {
     $("#accordion div.s_panel").accordion("option", "active", 0);
+}
+
+View.prototype.setSearchResultPanel = function() {
+    $("#search-results").sidebar({
+    position:"right",
+    open:"click",
+    // callback:{
+    // item : {
+    // enter : function(){
+    // $(this).find("a").animate({color:"red"}, 250);
+    // },
+    // leave : function(){
+    // $(this).find("a").animate({color:"white"}, 250);
+    // }
+    // }
+    // }
+    });
 }
 
 function venueMetadata(s) {
