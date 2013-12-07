@@ -5,6 +5,7 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/dark-glass/sidebar.css" />
   <link rel="stylesheet" href="css/custom.css" />
 </head>
 
@@ -45,17 +46,24 @@
     </div>
     <div class="col-md-3 scroll">
       <div id="collapse" align="right">
-        <button id="hide" class="btn btn-default">-</button>
-        <button id="expand" class="btn btn-default">+</button>
-      </div>
-      <div id="accordion" align="left">
+        <button id="hide" class="btn btn-default collapsible">-</button>
+        <button id="expand" class="btn btn-default collapsible">+</button>
         <div align="center">
-          <input type="text" id="itinerary-name" class="form-control input-normal" placeholder="Name Your Trip...">
+          <input type="text" id="itinerary-name" class="form-control" placeholder="Name Your Trip...">
         </div>
       </div>
-      <div id="ibuttons" align="center">
-        <button id="route" class="btn btn-default">Route</button>
-        <button id="save" class="btn btn-default">Save</button>
+      <ul id="search-results">
+        <li><a href="/index.html" >home is where the heart is</a></li>
+        <li><a href="/manage.html">Manage</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+      <div class="right-bar">
+        <div id="accordion" align="left">
+        </div>
+        <div id="ibuttons" align="center">
+          <button id="route" class="btn btn-default">Route</button>
+          <button id="save" class="btn btn-default">Save</button>
+        </div>
       </div>
     </div>
   </div>
@@ -64,6 +72,7 @@
   <script src="js/configs.js"></script>
   <script src="lib/jquery/jquery-1.10.2.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/jquery/jquery.sidebar.js"></script>
   <script src="lib/jstorage/jstorage.min.js"></script>
   <script src="lib/leaflet/leaflet.js"></script>
   <script src="lib/foursquare/foursquare.js"></script>
@@ -71,16 +80,5 @@
   <script src="lib/mapquest/mq-map.js"></script>
   <script src="lib/mapquest/mq-routing.js"></script>
   <script src="js/view.js"></script>
-  <script>
-  $(document).ready(function () {
-    $('#accordion').accordion({
-      collapsible: true,
-      active: false,
-      containment: 'column mapparent',
-      height: 'fill',
-      header: 'h4'
-    }).sortable({items: '.s_panel'});
-  });
-  </script>
 </body>
 </html>
