@@ -32,6 +32,55 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.routeHook();
     this.hideHook();
     this.expandHook();
+    this.preloadForm();
+}
+
+View.prototype.preloadForm = function() { 
+    var link = document.URL;
+
+    if (link.match('#')) {
+        var result = link.split('#');
+        var itineraryName = result[1]; 
+        var itineraries = $.jStorage.get("all", []);
+        var itinerary; 
+
+        for (var i = 0; i < itineraries.length; i++) {
+            if (itineraries[i].name === itineraryName) {
+                itinerary = itineraries[i]; 
+                break;
+            }
+        }
+
+        for (var i = 0; i < itinerary.venues.length; i++) {
+            var venue = itinerary.venues[i];
+            currentItinerary[venue.id] = venue;
+
+            var html = "<div class='s_panel' id=" + venue.id + ">"
+            html += "<h4>" + venue.name + "</h4><div>"
+            if (venue.description)
+                html += venueMetadata(venue.description);
+            if (venue.rating)
+                html += venueMetadata("Rating: " + venue.rating + " / 10.00");
+            if (venue.location.address) {
+                html += venueMetadata(venue.location.address);
+                html += venueMetadata(venue.location.city + ", " + venue.location.state);
+            }
+            if (venue.categories.length > 0)
+                html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
+                html += "</div>";
+                $("#accordion").append(html);
+                // $("#accordion").accordion("destroy");
+                $("#accordion #" + venue.id).accordion({
+                    collapsible: true,
+                    active: true,
+                    containment: 'column mapparent',
+                    header: 'h4',
+                    heightStyle: "content"
+                }).sortable({items: '.s_panel'});
+        }
+
+        this.addItineraryMarkers();   
+    }
 }
 
 /**
@@ -58,13 +107,13 @@ View.prototype.searchForm = function() {
             //     }
             // });
 
-    that.foursquare.geocode(location, function(reply) {
-        var locCenter = reply[0]['feature']['geometry']['center'];
-        that.map.setView(locCenter, 13);
-        that.drawMarkers(venue);
-    });
-    }
-    return false;
+            that.foursquare.geocode(location, function(reply) {
+                var locCenter = reply[0]['feature']['geometry']['center'];
+                that.map.setView(locCenter, 13);
+                that.drawMarkers(venue);
+            });
+        }
+        return false;
     });
 }
 /**
