@@ -1,44 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>New Itinerary</title>
-    <link rel="icon" type="image/png" href="favicon.png"/>
-    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
-    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/custom.css" />
-  </head>
+<head>
+  <title>New Itinerary</title>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/custom.css" />
+</head>
 
-  <body>
-    <div class="wrapper">
+<body>
+  <div class="wrapper">
 
     <div class="page-header" align="center">
-      <h1>Splash Page</h1>
+      <h1>PlanIt</h1>
     </div>
 
-    <div class="row">
-      <div class="col-lg-3 col-md-offset-2">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control" placeholder="food, landmarks, places..">  
-        </div><!-- /input-group -->
-      </div><!-- /.col-lg-3 col-md-offset-2 -->
-      <div class="col-lg-3">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control" placeholder="city ex:New York...">
-        </div>
-        <span class="input-group-btn">
-          <button class="btn btn-success" type="button">Go!</button>
-        </span>
+    <form class="form-inline" role="form" align="center">
+      <div class="form-group">
+        <label class="sr-only" for="venueinput">venue</label>
+        <input type="text" class="form-control" id="venueinput" placeholder="venue">
       </div>
-    </div><!-- /.row -->
+      <label>near</label>
+      <div class="form-group">
+        <label class="sr-only" for="locationinput">location</label>
+        <input type="text" class="form-control" id="locationinput" placeholder="location">
+      </div>
+      <button type="submit" class="btn btn-success">Search!</button>
+    </form>
 
-      <div class="push"></div>
-    </div>
-    <div class="footer" align="center">
-      <p>&copy; The Hudson Hackers, LLC 2013</p>
-    </div>
+    <div class="push"></div>
+  </div>
+  <div class="footer" align="center">
+    <p>&copy; The Hudson Hackers, LLC 2013</p>
+  </div>
 
-    <script src="lib/jquery/jquery-1.10.2.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/configs.js"></script>
-  </body>
+  <script src="lib/jquery/jquery-1.10.2.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="js/configs.js"></script>
+</body>
 </html>
