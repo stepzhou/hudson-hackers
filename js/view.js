@@ -55,12 +55,11 @@ View.prototype.preloadForm = function() {
 
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
-            console.log(venue);
             currentItinerary[venue.id] = venue;
 
             var html = $('<div/>', {
                 class: 's_panel',
-                id: "" + venueID
+                id: "" + venue.id
             }).appendTo('#accordion');
 
             $('<h4/>', { text: venue.name }).appendTo(html);
@@ -92,7 +91,7 @@ View.prototype.preloadForm = function() {
                     class: 'categories'}).appendTo(accordionDiv);
 
             // $("#accordion").accordion("destroy");
-            $("#accordion #" + venueID).accordion({
+            $("#accordion #" + venue.id).accordion({
                 collapsible: true,
                 active: true,
                 containment: 'column mapparent',
