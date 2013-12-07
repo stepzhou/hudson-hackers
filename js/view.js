@@ -56,7 +56,7 @@ $(document).ready(function () {
      * Connects the splash page to the view page for search
      */
     View.prototype.splashForm = function() {
-        var text = window.location.search.substr(1).split("&");
+        var text = window.location.search.substr(1).split("&");        
         if (text[0].length > 0) {
             var venue_string = text[0];
             var location_string = text[1];
@@ -71,6 +71,9 @@ $(document).ready(function () {
                 var location = location_string.split("=")[1];
             }
             
+            document.getElementById("venue-text").value = venue;
+            document.getElementById("location-text").value = location;
+
             // get the geocode for the location and update the map
             var that = this;
             this.foursquare.geocode(location, function(reply) {
