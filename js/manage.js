@@ -11,21 +11,29 @@ var itineraryOptions = '<div class="btn-group">';
 	for (var i = 0; i < allItineraries.length; i++) {
 
 		singleItinerary = allItineraries[i];
-		$(".user-itineraries").append("<div class='single-itinerary'> <h4>"+ singleItinerary.name + "</h4><ul>");
-		for (var j = 0; j < singleItinerary.venues.length; j++) {
-			singleVenue = singleItinerary.venues[j];
-			$(".user-itineraries").append("<li>"+ singleVenue.name + "</li>");
-		};
 
-		console.log("i: " + i + "singleItinerary.name: " + singleItinerary.name);
-
+		// dropdown
 		currentItineraryOptions = itineraryOptions;
-		currentItineraryOptions += '<ul class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
+		currentItineraryOptions += '<div class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
 		currentItineraryOptions += '<li class="divider"></li><li><button onclick="cloneItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="clone-button">Clone</button></li>';	
 		currentItineraryOptions += '<li class="divider"></li><li><button onclick="deleteItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="delete-button">Delete</button></li>';
-		currentItineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></ul></div>';
+		currentItineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></div></div>';
+		
+		// panel heading
+		$(".user-itineraries").append('<div class="panel panel-info" style="width: 600px;">' 
+									  + '<div class="panel-heading style="width: 600px;>'
+									  +   '<div class="dropdown pull-right">' + currentItineraryOptions + '</div>'
+									  +   '<div class="panel-title" style="font-size: 26pt">' + singleItinerary.name + '</div>' 
+									  + '</div>');
+		$(".user-itineraries").append('<div class="panel-body">');
 
-		$(".user-itineraries").append("</ul> " + currentItineraryOptions + " </div>");
+		// venues
+		for (var j = 0; j < singleItinerary.venues.length; j++) {
+			singleVenue = singleItinerary.venues[j];
+			$(".panel-body").append('<li>' + singleVenue.name+ '</li>');
+		};
+		$(".user-itineraries").append('<br>');
+		console.log("i: " + i + ", singleItinerary.name: " + singleItinerary.name);
 	};
 });
 
