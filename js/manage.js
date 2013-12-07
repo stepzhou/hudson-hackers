@@ -23,7 +23,7 @@ var itineraryOptions = '<div class="btn-group">';
 		$(".user-itineraries").append('<div class="panel panel-info" style="width: 600px;">' 
 									  + '<div class="panel-heading style="width: 600px;>'
 									  +   '<div class="dropdown pull-right">' + currentItineraryOptions + '</div>'
-									  +   '<div class="panel-title" style="font-size: 26pt">' + singleItinerary.name + '</div>' 
+									  +   '<div class="panel-title" style="font-size: 20pt">' + singleItinerary.name + '</div>' 
 									  + '</div>');
 		$(".user-itineraries").append('<div class="panel-body">');
 
