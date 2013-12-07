@@ -56,13 +56,13 @@ View.prototype.searchForm = function() {
             //     }
             // });
 
-    that.foursquare.geocode(location, function(reply) {
-        var locCenter = reply[0]['feature']['geometry']['center'];
-        that.map.setView(locCenter, 13);
-        that.drawMarkers(venue);
-    });
-    }
-    return false;
+            that.foursquare.geocode(location, function(reply) {
+                var locCenter = reply[0]['feature']['geometry']['center'];
+                that.map.setView(locCenter, 13);
+                that.drawMarkers(venue);
+            });
+        }
+        return false;
     });
 }
 /**
