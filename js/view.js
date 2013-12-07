@@ -29,6 +29,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.markerLayer.addTo(map);
     this.saveMarkerLayer.addTo(map);
     this.routeLayer.addTo(map);
+
     this.searchForm();
     this.saveHook();
     this.routeHook();
