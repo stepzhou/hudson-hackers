@@ -457,8 +457,7 @@ $(document).ready(function () {
 
     View.prototype.setSearchResultPanel = function() {
         $("#search-results").sidebar({
-        position:"right",
-        open:"click",
+        position:"right"
         // callback:{
         // item : {
         // enter : function(){
