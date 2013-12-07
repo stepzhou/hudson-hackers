@@ -51,8 +51,11 @@ View.prototype.preloadForm = function() {
             }
         }
 
+        var centerVenue = itinerary.venues[0];
+
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
+            console.log(venue);
             currentItinerary[venue.id] = venue;
 
             var html = "<div class='s_panel' id=" + venue.id + ">"
@@ -79,6 +82,7 @@ View.prototype.preloadForm = function() {
                 }).sortable({items: '.s_panel'});
         }
 
+        this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
         this.addItineraryMarkers();   
     }
 }
@@ -104,6 +108,7 @@ View.prototype.searchForm = function() {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
                 that.drawMarkers(venue);
+                console.log(locCenter.lat);
             });
         }
         return false;
@@ -208,23 +213,41 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
+
+    var link = document.URL;
+    var value = $.jStorage.get("all", []);
+
     var time = new Date();
     var itinerary = {};
     var venues = new Array();
     $("#accordion .s_panel").each(function(index) {
-        console.log("this.id:" + this.id);
         venues.push(currentItinerary[this.id]);
     });
     itinerary['venues'] = venues;
     itinerary['creation_time'] = time.getTime();
     itinerary['name'] = "Default";
-    console.log(itinerary);
-    var value = $.jStorage.get("all", []);
-    value.push(itinerary);
+
+    //if the itinerary is being edited,
+    //we replace the previously saved itinerary
+    //with the updated itinerary
+    if (link.match('#')) {
+        for (var i = 0; i < value.length; i++) {
+            if (value[i].name === link.split("#")[1]){
+                value.splice(i, 1, itinerary);
+            }
+        }
+            
+    }
+    //else, this is a new itinerary, and push it
+    //to the end of our locally stored object
+    else {
+
+        value.push(itinerary);
+        // $.cookie.json = true;
+        // $.cookie('dummy', JSON.stringify(currentItinerary));
+        // console.log(JSON.parse($.cookie('dummy')));
+    }
     $.jStorage.set("all", value);
-    // $.cookie.json = true;
-    // $.cookie('dummy', JSON.stringify(currentItinerary));
-    // console.log(JSON.parse($.cookie('dummy')));
 }
 
 // TODO: Make object to hold this information
