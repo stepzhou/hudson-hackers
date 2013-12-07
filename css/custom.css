@@ -83,17 +83,22 @@ div > div:only-child > form:only-child > button[type="submit"] {
 /* positioning the itineraries and buttons relatively */
 
 #collapse {
-  height:15%;
+  min-height:100px;
+}
+
+.right-bar {
+  /* lol rly, really? am I really doing this? REALLY? */
+  height: calc(100% - 150px);
 }
 
 #accordion {
-  height: 75%;
+  height: 100%;
   overflow:auto;
   overflow-x:hidden;
 }
 
 #ibuttons {
-  height: 10%;
+  min-height:50px;
 }
 
 .navbar-collapse {
@@ -109,7 +114,9 @@ div > div:only-child > form:only-child > button[type="submit"] {
 }
 
 #itinerary-name {
-  width:60%;
+  width:90%;
+  height:45px;
+  font-size:24px;
 }
 
 /* collapsible button formatting */

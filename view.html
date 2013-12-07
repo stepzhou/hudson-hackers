@@ -51,11 +51,13 @@
           <input type="text" id="itinerary-name" class="form-control" placeholder="Name Your Trip...">
         </div>
       </div>
-      <div id="accordion" align="left">
-      </div>
-      <div id="ibuttons" align="center">
-        <button id="route" class="btn btn-default">Route</button>
-        <button id="save" class="btn btn-default">Save</button>
+      <div class="right-bar">
+        <div id="accordion" align="left">
+        </div>
+        <div id="ibuttons" align="center">
+          <button id="route" class="btn btn-default">Route</button>
+          <button id="save" class="btn btn-default">Save</button>
+        </div>
       </div>
     </div>
   </div>
@@ -68,17 +70,6 @@
   <script src="lib/leaflet/leaflet.js"></script>
   <script src="lib/foursquare/foursquare.js"></script>
   <script src="lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-  <script>
-  $(document).ready(function () {
-    $('#accordion').accordion({
-      collapsible: true,
-      active: false,
-      containment: 'column mapparent',
-      height: 'fill',
-      header: 'h4'
-    }).sortable({items: '.s_panel'});
-  });
-  </script>
   <script src="lib/mapquest/mq-map.js"></script>
   <script src="lib/mapquest/mq-routing.js"></script>
   <script src="js/view.js"></script>
