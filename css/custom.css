@@ -62,6 +62,10 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 /* formatting itinerary summary */
 
+.s_panel {
+  padding-bottom:2px;
+}
+
 .description {
 }
 
@@ -88,4 +92,8 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 #ibuttons {
   height: 10%;
+}
+
+.navbar-collapse {
+  margin-right:50%;
 }
