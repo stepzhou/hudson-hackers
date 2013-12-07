@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         // To close popup when remove, ya anthr var wat u gun do abt it, huh??
         this.currentPopup;
-        map.on("popupopen", bind(function(evt) { this.currentPopup = evt.popup;console.log(this.currentPopup); }, this));
+        map.on("popupopen", bind(function(evt) { this.currentPopup = evt.popup; }, this));
 
         this.markerLayer = new L.layerGroup();
         this.saveMarkerLayer = new L.layerGroup();
@@ -122,12 +122,15 @@ $(document).ready(function () {
 
             this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
         }
+
+        toggleEmptyItineraryMsg();
     }
 
     /**
      * Adds markers upon search. Defaults to New York if no location is given
      */
     View.prototype.searchForm = function() {
+        // 'that' hack since bind doesn't work with this, so wat
         var that = this;
         $('#search-form').submit(function () {
             history = {};
@@ -269,6 +272,7 @@ $(document).ready(function () {
         }).sortable({items: '.s_panel'});
 
         currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+        toggleEmptyItineraryMsg();
         this.addItineraryMarker(venueID);
     }
 
@@ -374,6 +378,7 @@ $(document).ready(function () {
         $('#' + venueID).remove();
         this.saveMarkerLayer.removeLayer(markers[venueID]);
         delete currentItinerary[venueID];
+        toggleEmptyItineraryMsg();
     }
 
     /**
@@ -449,6 +454,13 @@ $(document).ready(function () {
         // }
         // }
         });
+    }
+
+    function toggleEmptyItineraryMsg() {
+        if (jQuery.isEmptyObject(currentItinerary))
+            $('#emptymsg').text('Your itinerary is empty. Search and add results above!');
+        else
+            $('#emptymsg').empty();
     }
 
     /**

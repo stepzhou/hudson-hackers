@@ -80,6 +80,13 @@ div > div:only-child > form:only-child > button[type="submit"] {
 .stats {
 }
 
+#emptymsg {
+  padding-top: 20px;
+  font-size: 18pt;
+  font-style: italic;
+  color: gray;
+}
+
 /* positioning the itineraries and buttons relatively */
 
 #collapse {
