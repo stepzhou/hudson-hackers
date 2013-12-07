@@ -45,13 +45,13 @@
     </div>
     <div class="col-md-3 scroll">
       <div id="collapse" align="right">
-        <button id="hide" class="btn btn-default">-</button>
-        <button id="expand" class="btn btn-default">+</button>
+        <button id="hide" class="btn btn-default collapsible">-</button>
+        <button id="expand" class="btn btn-default collapsible">+</button>
+        <div align="center">
+          <input type="text" id="itinerary-name" class="form-control" placeholder="Name Your Trip...">
+        </div>
       </div>
       <div id="accordion" align="left">
-        <div align="center">
-          <input type="text" id="itinerary-name" class="form-control input-normal" placeholder="Name Your Trip...">
-        </div>
       </div>
       <div id="ibuttons" align="center">
         <button id="route" class="btn btn-default">Route</button>
@@ -68,9 +68,6 @@
   <script src="lib/leaflet/leaflet.js"></script>
   <script src="lib/foursquare/foursquare.js"></script>
   <script src="lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-  <script src="lib/mapquest/mq-map.js"></script>
-  <script src="lib/mapquest/mq-routing.js"></script>
-  <script src="js/view.js"></script>
   <script>
   $(document).ready(function () {
     $('#accordion').accordion({
@@ -82,5 +79,8 @@
     }).sortable({items: '.s_panel'});
   });
   </script>
+  <script src="lib/mapquest/mq-map.js"></script>
+  <script src="lib/mapquest/mq-routing.js"></script>
+  <script src="js/view.js"></script>
 </body>
 </html>

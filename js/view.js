@@ -21,6 +21,8 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
         minZoom: 5,
         maxZoom: 15
     }).addTo(map);
+    this.currentPopup;
+    map.on("popupopen", function(evt){this.currentPopup = evt.popup});
 
     this.markerLayer = new L.layerGroup();
     this.saveMarkerLayer = new L.layerGroup();
@@ -89,54 +91,22 @@ View.prototype.preloadForm = function() {
         var centerVenue = itinerary.venues[0];
         $('#itinerary-name').val(itinerary.name);
 
+        // This doesn't get called in order view.html before things are preloaded
+        $('#accordion').accordion({
+          collapsible: true,
+          active: false,
+          containment: 'column mapparent',
+          height: 'fill',
+          header: 'h4'
+        }).sortable({items: '.s_panel'});
+
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
             currentItinerary[venue.id] = venue;
-
-            var html = $('<div/>', {
-                class: 's_panel',
-                id: "" + venue.id
-            }).appendTo('#accordion');
-
-            $('<h4/>', { text: venue.name }).appendTo(html);
-            var accordionDiv = $('<div/>').appendTo(html);
-
-            if (venue.description)
-                $('<div/>', { 
-                    text: venue.description,
-                    class: 'description'}).appendTo(accordionDiv);
-
-            if (venue.location.address) 
-                $('<div/>', { 
-                    text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
-                    class: 'address'}).appendTo(accordionDiv);
-
-            if (venue.rating)
-                $('<div/>', {
-                    text: venue.rating + ' / 10 rating',
-                    class: 'rating'
-                }).appendTo(accordionDiv);
-
-            $('<div/>', {
-                text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
-                class: 'stats' }).appendTo(accordionDiv);
-
-            if (venue.categories.length > 0)
-                $('<div/>', { 
-                    text: venue.categories.map(function(x) { return x.name; }).join(", "),
-                    class: 'categories'}).appendTo(accordionDiv);
-
-            // $("#accordion").accordion("destroy");
-            $("#accordion #" + venue.id).accordion({
-                collapsible: true,
-                active: true,
-                containment: 'column mapparent',
-                header: 'h4',
-                heightStyle: "content"
-            }).sortable({items: '.s_panel'});
-            
-            this.addItineraryMarker(venue.id);  
+            history[venue.id] = venue;
+            this.addVenueToItinerary(venue.id);
         }
+        history = {};
 
         this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
     }
@@ -205,7 +175,7 @@ View.prototype.addVenueMarker = function(venue) {
     marker_text += '<b>' + venue_name + '</b>';
     marker_text += venue_description;
     marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-    marker_text += '<br><button class="btn btn-default btn-sm" onclick="v.addToItinerary(' + _markerID + ')">Add to Itinerary</button>';
+    marker_text += '<br><button class="btn btn-default btn-sm" onclick="v.addVenueToItinerary(' + _markerID + ')">Add to Itinerary</button>';
     marker_text += '</div>'
 
     var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
@@ -309,7 +279,7 @@ View.prototype.saveItinerary = function() {
 }
 
 // TODO: Make object to hold this information
-View.prototype.addToItinerary = function(venueID) {
+View.prototype.addVenueToItinerary = function(venueID) {
     var params = {}
     var venue = history[venueID];
     var html = $('<div/>', {
@@ -317,9 +287,11 @@ View.prototype.addToItinerary = function(venueID) {
         id: "" + venueID
     }).appendTo('#accordion');
 
-    $('<h4/>', { text: venue.name + " " }).append(
-        $('<button/>', { class: 'delete'}).append(
-            $('<span/>', {class: 'glyphicon glyphicon-remove'})).on('click', {id: venueID}, bind(this.deleteFromItinerary, this)).appendTo(html)
+    $('<h4/>', { text: venue.name + " " })
+        .append($('<button/>', { class: 'delete'})
+            .append($('<span/>', {class: 'glyphicon glyphicon-remove'}))
+                .on('click', {id: venueID}, bind(this.deleteFromItinerary, this))
+        .appendTo(html)
     ).appendTo(html);
             
     var accordionDiv = $('<div/>').appendTo(html);
