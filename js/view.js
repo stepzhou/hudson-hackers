@@ -33,6 +33,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.routeHook();
     this.hideHook();
     this.expandHook();
+    this.deleteHook();
     this.preloadForm();
     this.splashForm();
 }
@@ -205,7 +206,7 @@ View.prototype.addVenueMarker = function(venue) {
     .bindPopup(marker_text)
         .on('click', function(e) { this.openPopup(); })
         .on('unclick', function(e) { this.closePopup(); });
-        this.markerLayer.addLayer(marker);
+    this.markerLayer.addLayer(marker);
 }
 
 
@@ -213,6 +214,7 @@ View.prototype.addVenueMarker = function(venue) {
  * Adds markers for current itinerary items to the map
  */
 View.prototype.addItineraryMarkers = function() {
+    this.saveMarkerLayer.clearLayers();
     for (var key in currentItinerary) {
         var venue = currentItinerary[key];
 
@@ -227,7 +229,7 @@ View.prototype.addItineraryMarkers = function() {
         }
 
         var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + (++_markerID) + '">';
+        var marker_text = '<div id="'  + (key) + '">';
         marker_text += '<b>' + venue_name + '</b>';
         marker_text += venue_description;
         marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
@@ -313,7 +315,10 @@ View.prototype.addToItinerary = function(venueID) {
         id: "" + venueID
     }).appendTo('#accordion');
 
-    $('<h4/>', { text: venue.name }).appendTo(html);
+    $('<h4/>', { text: venue.name + " " }).append(
+        $('<button/>', { id: 'd' + venueID, class: 'delete'}).append(
+            $('<span/>', {class: 'glyphicon glyphicon-remove'}))).appendTo(html);
+            
     var accordionDiv = $('<div/>').appendTo(html);
 
     if (venue.description)
@@ -341,7 +346,6 @@ View.prototype.addToItinerary = function(venueID) {
             text: venue.categories.map(function(x) { return x.name; }).join(", "),
             class: 'categories'}).appendTo(accordionDiv);
 
-    // $("#accordion").accordion("destroy");
     $("#accordion #" + venueID).accordion({
         collapsible: true,
         active: true,
@@ -395,6 +399,11 @@ View.prototype.expandHook = function() {
 
 View.prototype.expandAll = function() {
     $("#accordion div.s_panel").accordion("option", "active", 0);
+}
+
+View.prototype.deleteHook = function() {
+    // Fill out on click, don't forget bind this
+    $(".delete");
 }
 
 function venueMetadata(s) {

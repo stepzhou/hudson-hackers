@@ -52,7 +52,8 @@ div > div:only-child > form:only-child > button[type="submit"] {
 /* scrolling things */
 
 .row {
-  margin-right: 0px;
+  margin-right:0;
+  padding-right:15px;
 }
 
 .scroll {
@@ -64,6 +65,7 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 .s_panel {
   padding-bottom:2px;
+  padding-left:20px;
 }
 
 .description {
@@ -96,4 +98,16 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 .navbar-collapse {
   margin-right:50%;
+}
+
+/* delete */
+
+.delete, #hide, #expand {
+  padding:0;
+  border:none;
+  background:none;
+}
+
+.form-control {
+  width:60%;
 }
