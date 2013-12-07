@@ -30,8 +30,10 @@ $(document).ready(function () {
             minZoom: 5,
             maxZoom: 15
         }).addTo(map);
+
+        // To close popup when remove, ya anthr var wat u gun do abt it, huh??
         this.currentPopup;
-        map.on("popupopen", function(evt){this.currentPopup = evt.popup});
+        map.on("popupopen", bind(function(evt) { this.currentPopup = evt.popup; }, this));
 
         this.markerLayer = new L.layerGroup();
         this.saveMarkerLayer = new L.layerGroup();
@@ -120,12 +122,15 @@ $(document).ready(function () {
 
             this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
         }
+
+        toggleEmptyItineraryMsg();
     }
 
     /**
      * Adds markers upon search. Defaults to New York if no location is given
      */
     View.prototype.searchForm = function() {
+        // 'that' hack since bind doesn't work with this, so wat
         var that = this;
         $('#search-form').submit(function () {
             history = {};
@@ -231,6 +236,7 @@ $(document).ready(function () {
             id: "" + venueID
         }).appendTo('#accordion');
 
+        // title and delete button
         $('<h4/>', { text: venue.name + " " })
             .append($('<button/>', { class: 'delete'})
                 .append($('<span/>', {class: 'glyphicon glyphicon-remove'}))
@@ -269,6 +275,7 @@ $(document).ready(function () {
                 class: 'categories'
             }).appendTo(accordionDiv);
 
+        // accordion everything again
         $("#accordion #" + venueID).accordion({
             collapsible: true,
             active: true,
@@ -278,6 +285,7 @@ $(document).ready(function () {
         }).sortable({items: '.s_panel'});
 
         currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
+        toggleEmptyItineraryMsg();
         this.addItineraryMarker(venueID);
     }
 
@@ -365,9 +373,6 @@ $(document).ready(function () {
             // else, this is a new itinerary, and push it
             // to the end of our locally stored object
             value.push(itinerary);
-            // $.cookie.json = true;
-            // $.cookie('dummy', JSON.stringify(currentItinerary));
-            // console.log(JSON.parse($.cookie('dummy')));
         }
         $.jStorage.set("all", value);
         alert("Itinerary Saved!");
@@ -377,12 +382,16 @@ $(document).ready(function () {
      * Deletes a venue from an itinerary
      */
     View.prototype.deleteFromItinerary = function(event) {
+        if (this.currentPopup)
+            // calling a private function, w/e yolo
+            this.currentPopup._close();
         var venueID = event.data.id;
-        // Stupid hack
+        // Stupid hack, wanna fite me over it??
         $('#' + venueID).remove();
         $('#' + venueID).remove();
         this.saveMarkerLayer.removeLayer(markers[venueID]);
         delete currentItinerary[venueID];
+        toggleEmptyItineraryMsg();
     }
 
     /**
@@ -460,6 +469,16 @@ $(document).ready(function () {
         });
     }
 
+    function toggleEmptyItineraryMsg() {
+        if (jQuery.isEmptyObject(currentItinerary))
+            $('#emptymsg').text('Your itinerary is empty. Search and add results above!');
+        else
+            $('#emptymsg').empty();
+    }
+
+    /**
+     * Main function
+     */
     $(function() {
         var v = new View(foursquare_client, foursquare_secret, 
                          "https://foursquare.com/", "https://api.foursquare.com",
