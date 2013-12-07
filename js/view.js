@@ -58,28 +58,47 @@ View.prototype.preloadForm = function() {
             console.log(venue);
             currentItinerary[venue.id] = venue;
 
-            var html = "<div class='s_panel' id=" + venue.id + ">"
-            html += "<h4>" + venue.name + "</h4><div>"
+            var html = $('<div/>', {
+                class: 's_panel',
+                id: "" + venueID
+            }).appendTo('#accordion');
+
+            $('<h4/>', { text: venue.name }).appendTo(html);
+            var accordionDiv = $('<div/>').appendTo(html);
+
             if (venue.description)
-                html += venueMetadata(venue.description);
+                $('<div/>', { 
+                    text: venue.description,
+                    class: 'description'}).appendTo(accordionDiv);
+
+            if (venue.location.address) 
+                $('<div/>', { 
+                    text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
+                    class: 'address'}).appendTo(accordionDiv);
+
             if (venue.rating)
-                html += venueMetadata("Rating: " + venue.rating + " / 10.00");
-            if (venue.location.address) {
-                html += venueMetadata(venue.location.address);
-                html += venueMetadata(venue.location.city + ", " + venue.location.state);
-            }
+                $('<div/>', {
+                    text: venue.rating + ' / 10 rating',
+                    class: 'rating'
+                }).appendTo(accordionDiv);
+
+            $('<div/>', {
+                text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
+                class: 'stats' }).appendTo(accordionDiv);
+
             if (venue.categories.length > 0)
-                html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
-                html += "</div>";
-                $("#accordion").append(html);
-                // $("#accordion").accordion("destroy");
-                $("#accordion #" + venue.id).accordion({
-                    collapsible: true,
-                    active: true,
-                    containment: 'column mapparent',
-                    header: 'h4',
-                    heightStyle: "content"
-                }).sortable({items: '.s_panel'});
+                $('<div/>', { 
+                    text: venue.categories.map(function(x) { return x.name; }).join(", "),
+                    class: 'categories'}).appendTo(accordionDiv);
+
+            // $("#accordion").accordion("destroy");
+            $("#accordion #" + venueID).accordion({
+                collapsible: true,
+                active: true,
+                containment: 'column mapparent',
+                header: 'h4',
+                heightStyle: "content"
+            }).sortable({items: '.s_panel'});
         }
 
         this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
