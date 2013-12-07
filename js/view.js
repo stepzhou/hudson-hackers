@@ -34,6 +34,32 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.hideHook();
     this.expandHook();
     this.preloadForm();
+    this.splashForm();
+}
+
+View.prototype.splashForm = function() {
+    var text = window.location.search.substr(1).split("&");
+    if(text[0].length > 0) {
+        var venue_string = text[0];
+        var location_string = text[1];
+
+        // get venue
+        var venue = venue_string.split("=")[1];
+
+        // get location
+        if(!location_string) { 
+            var location = 'New York'; // default to New York if no location given
+        } else { 
+            var location = location_string.split("=")[1];
+        }
+        
+        var that = this;
+        this.foursquare.geocode(location, function(reply) {
+            var locCenter = reply[0]['feature']['geometry']['center'];
+            that.map.setView(locCenter, 13);
+            that.drawMarkers(venue);
+        });
+    }
 }
 
 View.prototype.preloadForm = function() { 
