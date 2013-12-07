@@ -53,6 +53,7 @@ View.prototype.preloadForm = function() {
         }
 
         var centerVenue = itinerary.venues[0];
+        $('#itinerary-name').val(itinerary.name);
 
         for (var i = 0; i < itinerary.venues.length; i++) {
             var venue = itinerary.venues[i];
