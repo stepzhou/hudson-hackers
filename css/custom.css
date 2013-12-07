@@ -114,10 +114,16 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 /* delete */
 
-.delete, .collapsible {
+.delete, .collapsible, .mapbutts {
   padding:0;
   border:none;
   background:none;
+}
+
+.mapbutts {
+  padding-left:10px;
+  padding-right:10px;
+  font-size:34px;
 }
 
 #itinerary-name {
@@ -130,4 +136,8 @@ div > div:only-child > form:only-child > button[type="submit"] {
 
 .collapsible {
   font-size:20pt;
+}
+
+a, a:visited {
+  font-weight: normal;
 }
