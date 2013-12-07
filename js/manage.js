@@ -14,10 +14,11 @@ var itineraryOptions = '<div class="btn-group">';
 
 		// dropdown
 		currentItineraryOptions = itineraryOptions;
-		currentItineraryOptions += '<div class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
-		currentItineraryOptions += '<li class="divider"></li><li><button onclick="cloneItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="clone-button">Clone</button></li>';	
-		currentItineraryOptions += '<li class="divider"></li><li><button onclick="deleteItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="delete-button">Delete</button></li>';
-		currentItineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></div></div>';
+		currentItineraryOptions += '<div class="dropdown-menu" role="menu">';
+		currentItineraryOptions += '<li><a class="btn btn-default" href="view.html#' + singleItinerary.name + ' ">View</a></li>';
+		currentItineraryOptions += '<li><a class="btn btn-default" onclick="cloneItinerary(\'' + singleItinerary.name + '\')">Clone</a></li>';
+		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItinerary(\'' + singleItinerary.name + '\')">Delete</a></li>';
+		currentItineraryOptions += '</div></div>';
 		
 		// panel heading
 		$(".user-itineraries").append('<div class="panel panel-info" style="width: 600px;">' 
