@@ -7,13 +7,11 @@ var currentItinerary = {};
  */
 function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
-
     this.map = new L.map('map', {
         layers: MQ.mapLayer(),
         center: [40.78, -73.97],
         zoom: 13
     });
-
     var map = this.map;
     var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
         key: cloudmadeKey,
@@ -35,32 +33,6 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.hideHook();
     this.expandHook();
     this.preloadForm();
-    this.splashForm();
-}
-
-View.prototype.splashForm = function() {
-    var text = window.location.search.substr(1).split("&");
-    if(text[0].length > 0) {
-        var venue_string = text[0];
-        var location_string = text[1];
-
-        // get venue
-        var venue = venue_string.split("=")[1];
-
-        // get location
-        if(!location_string) { 
-            var location = 'New York'; // default to New York if no location given
-        } else { 
-            var location = location_string.split("=")[1];
-        }
-        
-        var that = this;
-        this.foursquare.geocode(location, function(reply) {
-            var locCenter = reply[0]['feature']['geometry']['center'];
-            that.map.setView(locCenter, 13);
-            that.drawMarkers(venue);
-        });
-    }
 }
 
 View.prototype.preloadForm = function() { 
@@ -271,7 +243,15 @@ View.prototype.saveItinerary = function() {
     });
     itinerary['venues'] = venues;
     itinerary['creation_time'] = time.getTime();
-    itinerary['name'] = "Default";
+
+    var itName = $("#itinerary-name").val();
+
+    if (!itName) {
+        itinerary['name'] = "Default";
+    }
+    else {
+        itinerary['name'] = itName;
+    }
 
     //if the itinerary is being edited,
     //we replace the previously saved itinerary
