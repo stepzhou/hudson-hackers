@@ -29,7 +29,19 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.routeLayer.addTo(map);
     this.searchForm();
     this.saveHook();
-    this.toggleHook();
+    this.routeHook();
+    this.hideHook();
+    this.expandHook();
+    this.preloadForm();
+}
+
+View.prototype.preloadForm = function() { 
+    var link = document.URL;
+
+    if (link.match('#')) {
+
+        
+    }
 }
 
 /**
@@ -163,13 +175,6 @@ View.prototype.saveHook = function() {
     $('#save').on('click', this.saveItinerary);
 }
 
-/**
- * Dummy toggle button
- */
-View.prototype.toggleHook = function() {
-    $('#toggle').on('click', bind(this.routeDirections, this));
-}
-
 View.prototype.saveItinerary = function() {
     var time = new Date();
     var itinerary = {};
@@ -221,23 +226,47 @@ View.prototype.addToItinerary = function(venueID) {
     this.addItineraryMarkers();
 }
 
+/**
+ * Dummy hideAll button
+ */
+View.prototype.routeHook = function() {
+    $('#route').on('click', bind(this.routeDirections, this));
+}
+
 View.prototype.routeDirections = function() {
     dir = MQ.routing.directions();
+
     var locations = [];
     $("#accordion div.s_panel").each(function(index) {
         var place = currentItinerary[this.id];
         locations.push({latLng: {lat: place.location.lat, lng: place.location.lng}});
     }); 
-    console.log(locations);
 
     dir.route({
-        locations: locations
+        locations: locations,
+        routeType: 'pedestrian'
     });
     this.routeLayer.clearLayers();
     this.routeLayer.addLayer(MQ.routing.routeLayer({
         directions: dir,
         fitBounds: false
     }));
+}
+
+View.prototype.hideHook = function() {
+    $('#hide').on('click', bind(this.hideAll, this));
+}
+
+View.prototype.hideAll = function() {
+    $("#accordion div.s_panel").accordion("option", "active", false);
+}
+
+View.prototype.expandHook = function() {
+    $('#expand').on('click', bind(this.expandAll, this));
+}
+
+View.prototype.expandAll = function() {
+    $("#accordion div.s_panel").accordion("option", "active", 0);
 }
 
 function venueMetadata(s) {
