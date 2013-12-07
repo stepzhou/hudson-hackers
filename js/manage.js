@@ -6,6 +6,7 @@ var itineraryOptions = '<div class="btn-group">';
 	var allItineraries = $.jStorage.get("all", []);
 	var singleItinerary;
 	var singleVenue;
+	var currentItineraryOptions;
 
 	for (var i = 0; i < allItineraries.length; i++) {
 
@@ -16,12 +17,15 @@ var itineraryOptions = '<div class="btn-group">';
 			$(".user-itineraries").append("<li>"+ singleVenue.name + "</li>");
 		};
 
-		itineraryOptions += '<ul class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
-		itineraryOptions += '<li class="divider"></li><li><button onclick="cloneItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="clone-button">Clone</button></li>';	
-		itineraryOptions += '<li class="divider"></li><li><button onclick="deleteItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="delete-button">Delete</button></li>';
-		itineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></ul></div>';
+		console.log("i: " + i + "singleItinerary.name: " + singleItinerary.name);
 
-		$(".user-itineraries").append("</ul> " + itineraryOptions + " </div>");
+		currentItineraryOptions = itineraryOptions;
+		currentItineraryOptions += '<ul class="dropdown-menu" role="menu"><li><a href="view.html#' + singleItinerary.name + '">View</a>';
+		currentItineraryOptions += '<li class="divider"></li><li><button onclick="cloneItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="clone-button">Clone</button></li>';	
+		currentItineraryOptions += '<li class="divider"></li><li><button onclick="deleteItinerary(\'' + singleItinerary.name + '\')" class="btn btn-default" id="delete-button">Delete</button></li>';
+		currentItineraryOptions += '<li class="divider"></li><li><a href="#">TODO: email my itinerary</a></li></ul></div>';
+
+		$(".user-itineraries").append("</ul> " + currentItineraryOptions + " </div>");
 	};
 });
 

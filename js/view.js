@@ -1,6 +1,7 @@
 var _markerID = 0;
 var history = {};
-var currentItinerary = {};
+var currentItinerary = {}; 
+var markers = {};
 
 /**
  * Itinerary view prototype
@@ -9,7 +10,7 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.foursquare = new Foursquare(apiKey, secretKey, apiUrl, authUrl);
     this.map = new L.map('map', {
         layers: MQ.mapLayer(),
-        center: [40.78, -73.97],
+        center: [40.78, -73.97], // default to New York at start
         zoom: 13
     });
     var map = this.map;
@@ -33,14 +34,16 @@ function View(apiKey, secretKey, apiUrl, authUrl, cloudmadeKey) {
     this.routeHook();
     this.hideHook();
     this.expandHook();
-    this.deleteHook();
     this.preloadForm();
     this.splashForm();
 }
 
+/**
+ * Connects the splash page to the view page for search
+ */
 View.prototype.splashForm = function() {
     var text = window.location.search.substr(1).split("&");
-    if(text[0].length > 0) {
+    if (text[0].length > 0) {
         var venue_string = text[0];
         var location_string = text[1];
 
@@ -48,12 +51,13 @@ View.prototype.splashForm = function() {
         var venue = venue_string.split("=")[1];
 
         // get location
-        if(!location_string) { 
+        if (!location_string) { 
             var location = 'New York'; // default to New York if no location given
         } else { 
             var location = location_string.split("=")[1];
         }
         
+        // get the geocode for the location and update the map
         var that = this;
         this.foursquare.geocode(location, function(reply) {
             var locCenter = reply[0]['feature']['geometry']['center'];
@@ -63,6 +67,9 @@ View.prototype.splashForm = function() {
     }
 }
 
+/**
+ * Connects the manage page to the view page for saved itineraries
+ */
 View.prototype.preloadForm = function() { 
     var link = document.URL;
 
@@ -127,10 +134,11 @@ View.prototype.preloadForm = function() {
                 header: 'h4',
                 heightStyle: "content"
             }).sortable({items: '.s_panel'});
+            
+            this.addItineraryMarker(venue.id);  
         }
 
         this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
-        this.addItineraryMarkers();   
     }
 }
 
@@ -146,11 +154,10 @@ View.prototype.searchForm = function() {
 
         // TODO: validate venues
         // get location; if null, use a default for now
-        if(!location) { 
+        if (!location) { 
             location = 'New York';
             that.drawMarkers(venue);
-        }
-        else {
+        } else {
             that.foursquare.geocode(location, function(reply) {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
@@ -188,8 +195,7 @@ View.prototype.addVenueMarker = function(venue) {
 
     if (!!venue.description) {
         var venue_description = '<br/>' + venue.description;
-    }
-    else {
+    } else {
         var venue_description = "";
     }
 
@@ -209,48 +215,47 @@ View.prototype.addVenueMarker = function(venue) {
     this.markerLayer.addLayer(marker);
 }
 
-
 /**
  * Adds markers for current itinerary items to the map
  */
-View.prototype.addItineraryMarkers = function() {
-    this.saveMarkerLayer.clearLayers();
-    for (var key in currentItinerary) {
-        var venue = currentItinerary[key];
+View.prototype.addItineraryMarker = function(key) {
+    
+    var venue = currentItinerary[key];
 
-        var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
-        var venue_name = venue.name;
+    var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
+    var venue_name = venue.name;
 
-        if (!!venue.description) {
-          var venue_description = '<br/>' + venue.description;
-        }
-        else {
-          var venue_description = "";
-        }
-
-        var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + (key) + '">';
-        marker_text += '<b>' + venue_name + '</b>';
-        marker_text += venue_description;
-        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-        marker_text += '</div>'
-
-        var saveIcon = L.icon({
-          iconUrl: 'lib/leaflet/images/save-marker-icon.png',
-          shadowUrl: 'lib/leaflet/images/marker-shadow.png',
-          iconSize: [25,41],
-          shadowSize: [41,41],
-          iconAnchor: [12, 41],
-          shadowAnchor: [12,41]
-        });
-
-        var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
-            .bindPopup(marker_text)
-              //.bindPopup(venue['name'])
-              .on('click', function(e) { this.openPopup(); })
-              .on('unclick', function(e) { this.closePopup(); });
-        this.saveMarkerLayer.addLayer(marker);
+    if (!!venue.description) {
+      var venue_description = '<br/>' + venue.description;
     }
+    else {
+      var venue_description = "";
+    }
+
+    var venue_link = venue.canonicalUrl;
+    var marker_text = '<div id="'  + (key) + '">';
+    marker_text += '<b>' + venue_name + '</b>';
+    marker_text += venue_description;
+    marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+    marker_text += '</div>'
+
+    var saveIcon = L.icon({
+      iconUrl: 'lib/leaflet/images/save-marker-icon.png',
+      shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+      iconSize: [25,41],
+      shadowSize: [41,41],
+      iconAnchor: [12, 41],
+      shadowAnchor: [12,41]
+    });
+
+    var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
+        .bindPopup(marker_text)
+          //.bindPopup(venue['name'])
+          .on('click', function(e) { this.openPopup(); })
+          .on('unclick', function(e) { this.closePopup(); });
+    this.saveMarkerLayer.addLayer(marker);
+
+    markers[key] = marker;
 }
 
 /**
@@ -278,32 +283,29 @@ View.prototype.saveItinerary = function() {
 
     if (!itName) {
         itinerary['name'] = "Default";
-    }
-    else {
+    } else {
         itinerary['name'] = itName;
     }
 
-    //if the itinerary is being edited,
-    //we replace the previously saved itinerary
-    //with the updated itinerary
+    // if the itinerary is being edited,
+    // we replace the previously saved itinerary
+    // with the updated itinerary
     if (link.match('#')) {
         for (var i = 0; i < value.length; i++) {
-            if (value[i].name === link.split("#")[1]){
+            if (value[i].name === link.split("#")[1]) {
                 value.splice(i, 1, itinerary);
             }
         }
-            
-    }
-    //else, this is a new itinerary, and push it
-    //to the end of our locally stored object
-    else {
-
+    } else {
+        // else, this is a new itinerary, and push it
+        // to the end of our locally stored object
         value.push(itinerary);
         // $.cookie.json = true;
         // $.cookie('dummy', JSON.stringify(currentItinerary));
         // console.log(JSON.parse($.cookie('dummy')));
     }
     $.jStorage.set("all", value);
+    alert("Itinerary Saved!");
 }
 
 // TODO: Make object to hold this information
@@ -316,20 +318,23 @@ View.prototype.addToItinerary = function(venueID) {
     }).appendTo('#accordion');
 
     $('<h4/>', { text: venue.name + " " }).append(
-        $('<button/>', { id: 'd' + venueID, class: 'delete'}).append(
-            $('<span/>', {class: 'glyphicon glyphicon-remove'}))).appendTo(html);
+        $('<button/>', { class: 'delete'}).append(
+            $('<span/>', {class: 'glyphicon glyphicon-remove'})).on('click', {id: venueID}, bind(this.deleteFromItinerary, this)).appendTo(html)
+    ).appendTo(html);
             
     var accordionDiv = $('<div/>').appendTo(html);
 
     if (venue.description)
         $('<div/>', { 
             text: venue.description,
-            class: 'description'}).appendTo(accordionDiv);
+            class: 'description'
+        }).appendTo(accordionDiv);
 
     if (venue.location.address) 
         $('<div/>', { 
             text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
-            class: 'address'}).appendTo(accordionDiv);
+            class: 'address'
+        }).appendTo(accordionDiv);
 
     if (venue.rating)
         $('<div/>', {
@@ -339,12 +344,14 @@ View.prototype.addToItinerary = function(venueID) {
 
     $('<div/>', {
         text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
-        class: 'stats' }).appendTo(accordionDiv);
+        class: 'stats'
+    }).appendTo(accordionDiv);
 
     if (venue.categories.length > 0)
         $('<div/>', { 
             text: venue.categories.map(function(x) { return x.name; }).join(", "),
-            class: 'categories'}).appendTo(accordionDiv);
+            class: 'categories'
+        }).appendTo(accordionDiv);
 
     $("#accordion #" + venueID).accordion({
         collapsible: true,
@@ -355,7 +362,16 @@ View.prototype.addToItinerary = function(venueID) {
     }).sortable({items: '.s_panel'});
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
-    this.addItineraryMarkers();
+    this.addItineraryMarker(venueID);
+}
+
+View.prototype.deleteFromItinerary = function(event) {
+    var venueID = event.data.id;
+    // Stupid hack
+    $('#' + venueID).remove();
+    $('#' + venueID).remove();
+    this.saveMarkerLayer.removeLayer(markers[venueID]);
+    delete currentItinerary[venueID];
 }
 
 /**
@@ -365,6 +381,9 @@ View.prototype.routeHook = function() {
     $('#route').on('click', bind(this.routeDirections, this));
 }
 
+/**
+ * Draw Route for itinerary
+ */
 View.prototype.routeDirections = function() {
     dir = MQ.routing.directions();
 
@@ -399,11 +418,6 @@ View.prototype.expandHook = function() {
 
 View.prototype.expandAll = function() {
     $("#accordion div.s_panel").accordion("option", "active", 0);
-}
-
-View.prototype.deleteHook = function() {
-    // Fill out on click, don't forget bind this
-    $(".delete");
 }
 
 function venueMetadata(s) {

@@ -108,6 +108,6 @@ div > div:only-child > form:only-child > button[type="submit"] {
   background:none;
 }
 
-.form-control {
+#itinerary-name {
   width:60%;
 }
