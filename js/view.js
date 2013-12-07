@@ -67,9 +67,9 @@ $(document).ready(function () {
 
             // get location
             if (!location_string) { 
-                var location = 'New York'; // default to New York if no location given
-            } else { 
                 var location = location_string.split("=")[1];
+            } else { 
+                var location = 'New York'; // default to New York if no location given
             }
             
             document.getElementById("venue-text").value = venue;
