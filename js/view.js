@@ -1,6 +1,7 @@
 var _markerID = 0;
 var history = {};
-var currentItinerary = {};
+var currentItinerary = {}; 
+var markers = {};
 
 /**
  * Itinerary view prototype
@@ -214,7 +215,6 @@ View.prototype.addVenueMarker = function(venue) {
         this.markerLayer.addLayer(marker);
 }
 
-
 /**
  * Adds markers for current itinerary items to the map
  */
@@ -254,6 +254,8 @@ View.prototype.addItineraryMarker = function(key) {
           .on('click', function(e) { this.openPopup(); })
           .on('unclick', function(e) { this.closePopup(); });
     this.saveMarkerLayer.addLayer(marker);
+
+    markers[key] = marker;
 }
 
 /**
@@ -358,6 +360,12 @@ View.prototype.addToItinerary = function(venueID) {
 
     currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
     this.addItineraryMarker(venueID);
+}
+
+View.prototype.deleteFromItinerary = function(venueID) {
+    $('#venueID').remove();
+    this.saveMarkerLayer.removeLayer(markers[venueID]);
+    delete currentItinerary[venueID];
 }
 
 /**
