@@ -96,17 +96,10 @@ View.prototype.searchForm = function() {
         // TODO: validate venues
         // get location; if null, use a default for now
         if(!location) { 
-            location = 'New York'; // default to New York for now
+            location = 'New York';
             that.drawMarkers(venue);
         }
         else {
-            // TODO: allow user to select from multiple options instead of hardcode
-            // that.foursquare.geocode(location, function(reply) {
-            //     for (var i = 0; i < reply.length; i++) {
-            //         console.log(reply[i]);
-            //     }
-            // });
-
             that.foursquare.geocode(location, function(reply) {
                 var locCenter = reply[0]['feature']['geometry']['center'];
                 that.map.setView(locCenter, 13);
@@ -245,21 +238,30 @@ View.prototype.addToItinerary = function(venueID) {
 
     $('<h4/>', { text: venue.name }).appendTo(html);
     var accordionDiv = $('<div/>').appendTo(html);
+
     if (venue.description)
         $('<div/>', { 
             text: venue.description,
             class: 'description'}).appendTo(accordionDiv);
-    if (venue.rating)
+
+    if (venue.location.address) 
         $('<div/>', { 
-            text: "Rating: " + venue.rating + " / 10.00",
-            class: 'rating'}).appendTo(accordionDiv);
-    if (venue.location.address) {
-        $('<div/>', { text: venue.location.address }).appendTo(accordionDiv);
-        $('<div/>', { text: venue.location.city + ", " + venue.location.state }).appendTo(accordionDiv);
-    }
+            text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
+            class: 'address'}).appendTo(accordionDiv);
+
+    if (venue.rating)
+        $('<div/>', {
+            text: venue.rating + ' / 10 rating',
+            class: 'rating'
+        }).appendTo(accordionDiv);
+
+    $('<div/>', {
+        text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
+        class: 'stats' }).appendTo(accordionDiv);
+
     if (venue.categories.length > 0)
         $('<div/>', { 
-            text: 'Categories: ' + venue.categories.map(function(x) { return x.name; }).join(", "),
+            text: venue.categories.map(function(x) { return x.name; }).join(", "),
             class: 'categories'}).appendTo(accordionDiv);
 
     // $("#accordion").accordion("destroy");

@@ -48,3 +48,44 @@ div > div:only-child > form:only-child > button[type="submit"] {
   /* center the text in the button, assuming it's not already centered by twitter */
   text-align: center;
 }
+
+/* scrolling things */
+
+.row {
+  margin-right: 0px;
+}
+
+.scroll {
+  padding:0;
+  height:100%;
+}
+
+/* formatting itinerary summary */
+
+.description {
+}
+
+.address {
+}
+
+.rating {
+}
+
+.stats {
+}
+
+/* positioning the itineraries and buttons relatively */
+
+#collapse {
+  height:10%;
+}
+
+#accordion {
+  height: 80%;
+  overflow:auto;
+  overflow-x:hidden;
+}
+
+#ibuttons {
+  height: 10%;
+}
