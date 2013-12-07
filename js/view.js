@@ -47,6 +47,7 @@ $(document).ready(function () {
         this.routeHook();
         this.hideHook();
         this.expandHook();
+        this.clearMarkersHook();
         this.preloadForm();
         this.splashForm();
         this.setSearchResultPanel();
@@ -453,6 +454,13 @@ $(document).ready(function () {
      */
     View.prototype.expandAll = function() {
         $("#accordion div.s_panel").accordion("option", "active", 0);
+    }
+
+    View.prototype.clearMarkersHook = function() {
+        var that = this;
+        $("#clearmarkers").on('click', function() {
+            that.markerLayer.clearLayers();
+        });
     }
 
     View.prototype.setSearchResultPanel = function() {
