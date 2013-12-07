@@ -40,10 +40,19 @@ View.prototype.preloadForm = function() {
 
     if (link.match('#')) {
         var result = link.split('#');
-        var itineraryName = result[1];
+        var itineraryName = result[1]; 
+        var itineraries = $.jStorage.get("all", []);
+        var itinerary; 
 
-        var itinerary = $.jStorage.get("itineraryName", []);
-        for (venue in itinerary) {
+        for (var i = 0; i < itineraries.length; i++) {
+            if (itineraries[i].name === itineraryName) {
+                itinerary = itineraries[i]; 
+                break;
+            }
+        }
+
+        for (var i = 0; i < itinerary.venues.length; i++) {
+            var venue = itinerary.venues[i];
             currentItinerary[venue.id] = venue;
 
             var html = "<div class='s_panel' id=" + venue.id + ">"
@@ -58,16 +67,16 @@ View.prototype.preloadForm = function() {
             }
             if (venue.categories.length > 0)
                 html += venueMetadata("Categories: " + venue.categories.map(function(x) { return x.name; }).join(", "));
-            html += "</div>";
-            $("#accordion").append(html);
-            // $("#accordion").accordion("destroy");
-            $("#accordion #" + venueID).accordion({
-                collapsible: true,
-                active: true,
-                containment: 'column mapparent',
-                header: 'h4',
-                heightStyle: "content"
-            }).sortable({items: '.s_panel'});
+                html += "</div>";
+                $("#accordion").append(html);
+                // $("#accordion").accordion("destroy");
+                $("#accordion #" + venue.id).accordion({
+                    collapsible: true,
+                    active: true,
+                    containment: 'column mapparent',
+                    header: 'h4',
+                    heightStyle: "content"
+                }).sortable({items: '.s_panel'});
         }
 
         this.addItineraryMarkers();   
