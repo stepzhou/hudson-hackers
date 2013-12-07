@@ -25,12 +25,11 @@ var itineraryOptions = '<div class="btn-group">';
 									  +   '<div class="dropdown pull-right">' + currentItineraryOptions + '</div>'
 									  +   '<div class="panel-title" style="font-size: 20pt">' + singleItinerary.name + '</div>' 
 									  + '</div>');
-		$(".user-itineraries").append('<div class="panel-body">');
 
 		// venues
 		for (var j = 0; j < singleItinerary.venues.length; j++) {
 			singleVenue = singleItinerary.venues[j];
-			$(".panel-body").append('<li>' + singleVenue.name+ '</li>');
+			$(".user-itineraries").append('<li>' + singleVenue.name+ '</li>');
 		};
 		$(".user-itineraries").append('<br>');
 		console.log("i: " + i + ", singleItinerary.name: " + singleItinerary.name);
