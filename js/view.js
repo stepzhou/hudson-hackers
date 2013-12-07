@@ -220,23 +220,41 @@ View.prototype.saveHook = function() {
 }
 
 View.prototype.saveItinerary = function() {
+
+    var link = document.URL;
+    var value = $.jStorage.get("all", []);
+
     var time = new Date();
     var itinerary = {};
     var venues = new Array();
     $("#accordion .s_panel").each(function(index) {
-        console.log("this.id:" + this.id);
         venues.push(currentItinerary[this.id]);
     });
     itinerary['venues'] = venues;
     itinerary['creation_time'] = time.getTime();
     itinerary['name'] = "Default";
-    console.log(itinerary);
-    var value = $.jStorage.get("all", []);
-    value.push(itinerary);
+
+    //if the itinerary is being edited,
+    //we replace the previously saved itinerary
+    //with the updated itinerary
+    if (link.match('#')) {
+        for (var i = 0; i < value.length; i++) {
+            if (value[i].name === link.split("#")[1]){
+                value.splice(i, 1, itinerary);
+            }
+        }
+            
+    }
+    //else, this is a new itinerary, and push it
+    //to the end of our locally stored object
+    else {
+
+        value.push(itinerary);
+        // $.cookie.json = true;
+        // $.cookie('dummy', JSON.stringify(currentItinerary));
+        // console.log(JSON.parse($.cookie('dummy')));
+    }
     $.jStorage.set("all", value);
-    // $.cookie.json = true;
-    // $.cookie('dummy', JSON.stringify(currentItinerary));
-    // console.log(JSON.parse($.cookie('dummy')));
 }
 
 // TODO: Make object to hold this information
