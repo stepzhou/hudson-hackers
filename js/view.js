@@ -303,6 +303,7 @@ View.prototype.saveItinerary = function() {
         // console.log(JSON.parse($.cookie('dummy')));
     }
     $.jStorage.set("all", value);
+    alert("Itinerary Saved!");
 }
 
 // TODO: Make object to hold this information
