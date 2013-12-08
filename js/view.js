@@ -348,7 +348,7 @@ $(document).ready(function () {
 
         var link = document.URL;
         var value = $.jStorage.get("all", []);
-        
+
         var time = new Date();
         var itinerary = {};
         var venues = new Array();
@@ -373,7 +373,6 @@ $(document).ready(function () {
             for (var i = 0; i < value.length; i++) {
                 if (value[i].name === link.split("#")[1]) {
                     value.splice(i, 1, itinerary);
-                    // value[i] = itinerary;
                 }
             }
         } else {
@@ -383,7 +382,6 @@ $(document).ready(function () {
             for (var i = 0; i < value.length; i++) {
                 if (value[i].name === itName) {
                     value.splice(i, 1, itinerary);
-                    // value[i] = itinerary;
                     overwritten = true;
                 }
             }
