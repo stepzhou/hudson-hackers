@@ -66,10 +66,10 @@ $(document).ready(function () {
             var venue = venue_string.split("=")[1];
 
             // get location
-            if (!location_string) { 
-                var location = location_string.split("=")[1];
-            } else { 
+            if (!location_string) {
                 var location = 'New York'; // default to New York if no location given
+            } else { 
+                var location = location_string.split("=")[1];
             }
             
             document.getElementById("venue-text").value = venue;
@@ -158,6 +158,7 @@ $(document).ready(function () {
             return false;
         });
     }
+
     /**
      * Draws markers given a list of venues
      */
@@ -457,10 +458,14 @@ $(document).ready(function () {
         $("#accordion div.s_panel").accordion("option", "active", 0);
     }
 
+    /**
+     * Clears search results from map and list
+     */
     View.prototype.clearMarkersHook = function() {
         var that = this;
         $("#clearmarkers").on('click', function() {
             that.markerLayer.clearLayers();
+            $("#search-results li").remove();
         });
     }
 
@@ -480,6 +485,10 @@ $(document).ready(function () {
         });
     }
 
+    /**
+     * Either displays that current itinerary is empty, 
+     * or clears the text of the empty message.
+     */
     function toggleEmptyItineraryMsg() {
         if (jQuery.isEmptyObject(currentItinerary))
             $('#emptymsg').text('Your itinerary is empty. Search and add results above!');
