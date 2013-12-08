@@ -8,7 +8,7 @@ var itineraryOptions = '<div class="btn-group">';
 	var singleVenue;
 	var currentItineraryOptions;
 
-	for (var i = 0; i < allItineraries.length; i++) {
+	for (var i = allItineraries.length - 1; i >= 0; i--) {
 
 		singleItinerary = allItineraries[i];
 
