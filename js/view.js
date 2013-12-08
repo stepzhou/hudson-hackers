@@ -171,6 +171,8 @@ $(document).ready(function () {
      * Iterates through venue results to add venue marker
      */
     View.prototype.onVenues = function(venues) {
+        $(".break").prepend($('<li/><br/></li>'));
+
         for (var i = 0; i < venues.length; i++) {
             this.foursquare.getVenueInformation(venues[i].id, bind(this.addVenueMarker, this));        
         }
@@ -189,7 +191,6 @@ $(document).ready(function () {
      * Adds venue markers to the map
      */
     View.prototype.addVenueMarker = function(venue) {
-
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
         var venue_name = venue.name;
 
