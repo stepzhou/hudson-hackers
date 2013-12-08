@@ -13,8 +13,9 @@
 }
 
 div.sidebar-container {
-    width : 350px;
-    height : 73%;
+    width : 27.5%;
+    height:80%;
+    padding-top:150px;
     position:fixed;
     background-color:#4F8FFF;
     filter: alpha(opacity=100);
