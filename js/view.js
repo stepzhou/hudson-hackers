@@ -348,7 +348,7 @@ $(document).ready(function () {
 
         var link = document.URL;
         var value = $.jStorage.get("all", []);
-
+        
         var time = new Date();
         var itinerary = {};
         var venues = new Array();
@@ -373,12 +373,26 @@ $(document).ready(function () {
             for (var i = 0; i < value.length; i++) {
                 if (value[i].name === link.split("#")[1]) {
                     value.splice(i, 1, itinerary);
+                    // value[i] = itinerary;
                 }
             }
         } else {
+            var overwritten = false; 
+
+            // overwrite existing 
+            for (var i = 0; i < value.length; i++) {
+                if (value[i].name === itName) {
+                    value.splice(i, 1, itinerary);
+                    // value[i] = itinerary;
+                    overwritten = true;
+                }
+            }
+
             // else, this is a new itinerary, and push it
             // to the end of our locally stored object
-            value.push(itinerary);
+            if (!overwritten) {
+                value.push(itinerary);
+            }
         }
         $.jStorage.set("all", value);
         alert("Itinerary Saved!");
