@@ -1,4 +1,4 @@
-$(document).ready(function () {
+//(document).ready(function () {
     $('#accordion').accordion({
         collapsible: true,
         active: false,
@@ -12,6 +12,7 @@ $(document).ready(function () {
     var currentItinerary = {}; //venue objects that have been selected
     var pinkMarkers = {}; //pink markers, associated with selected venue objects
     var blueMarkers = {}; //blue markers, associated with marker ids.
+    var highlightMarker;
 
     /**
      * Itinerary view prototype
@@ -289,7 +290,7 @@ $(document).ready(function () {
 
         marker.openPopup();
 
-        pinkMarkers[venueID] = marker;
+        highlightMarker = marker;
     }
 
     /* 
@@ -303,9 +304,8 @@ $(document).ready(function () {
      * Turns off the Highlighting of a Venue Marker
      */
     View.prototype.unHighlightPossibleVenue = function(venueID) {
-        var marker = pinkMarkers[venueID];
-        marker.closePopup();
-        this.saveMarkerLayer.removeLayer(marker);
+        highlightMarker.closePopup();
+        this.saveMarkerLayer.removeLayer(highlightMarker);
     }
 
     /*
@@ -605,4 +605,4 @@ console.log(currentItinerary[venueID]);
                          "https://foursquare.com/", "https://api.foursquare.com",
                          cloudmade_key);
     });
-});
+//});
