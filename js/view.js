@@ -231,6 +231,10 @@ $(document).ready(function () {
 
         this.addSearchResult(venue, _markerID);
 
+console.log("markerText");
+console.log(markerText);
+console.log("markerText[0]");
+console.log(markerText[0]);
         var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
             .bindPopup(markerText[0])
             .on('click', function(e) { this.openPopup(); })
@@ -246,7 +250,7 @@ $(document).ready(function () {
     }
 
     /* Highlights a venue marker when user hovers over corresponding search result */
-    View.prototype.highlightPossibleVenue = function (venueID) {
+    View.prototype.highlightPossibleVenue = function(venueID) {
         var venue = history[venueID];
 
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
@@ -260,10 +264,11 @@ $(document).ready(function () {
         }
 
         var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + (venueID) + '">';
-        marker_text += '<b>' + venue_name + '</b>';
-        marker_text += venue_description;
-        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
+console.log(venue_link);
+        var marker_text = '<div id="'  + venueID + '">';
+        marker_text += '<h5>' + venue_name + '</h5>';
+        marker_text += '<div>' + venue_description  + '</div>';
+        marker_text += '<div><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href="' + venue_link + '" target="_blank">FourSquare</a></div>';
         marker_text += '</div>'
 
         var saveIcon = L.icon({
@@ -276,10 +281,10 @@ $(document).ready(function () {
         });
 
 console.log(marker_text);
-
-        var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
+    // FIX SAVE ICON
+        var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
             .bindPopup(marker_text)
-              .bindPopup(venue['name'])
+              //.bindPopup(venue['name'])
               .on('click', function(e) { this.openPopup(); })
               .on('unclick', function(e) { this.closePopup(); })
               ;
