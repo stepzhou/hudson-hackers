@@ -24,7 +24,6 @@ Folder Hierarchy
     ├── js                      (Custom javascript)
     │   ├── configs.js          (Your secret keys)
     │   ├── configs_public.js   (Public secret key template)
-    │   ├── main.js
     │   └── view.js             (Create itinerary js)
     ├── lib                     (Third-party libraries)
     │   ├── bootstrap
@@ -33,7 +32,7 @@ Folder Hierarchy
     │   └── leaflet
     ├── about.html              (About page)
     ├── favicon.ico             (favicon)
-    ├── index.html              (index page)
+    ├── index.html              (Splash page)
     ├── manage.html             (Manage itineraries page)
     ├── README.md               (This file)
     └── view.html               (Create itinerary page)
