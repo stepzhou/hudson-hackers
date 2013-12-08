@@ -212,18 +212,18 @@ $(document).ready(function () {
         }
 
         var markerText = $('<div/>', { id: ++_markerID });
-        $('<h5/>', { text: venue.name }).appendTo(markerText);
+        $('<h4/>', { text: venue.name }).appendTo(markerText);
 
         if (!!venue.description)
-            $('<div/>', { text: venue.description }).appendTo(markerText);
+            $('<div/>', { text: venue.description, class: 'popuptext' }).appendTo(markerText);
 
         $('<div/>')
             .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
-            .append($('<a/>', { text: 'Foursquare', href: venue.canonicalUrl } ))
+            .append($('<a/>', { text: 'Foursquare', class: 'popuptext', href: venue.canonicalUrl } ))
             .appendTo(markerText);
 
         $('<div/>')
-            .append($('<button/>', { text: 'Add to Itinerary', class: 'btn btn-default btn-sm' })
+            .append($('<button/>', { text: 'Add to Itinerary', class: 'btn btn-default btn-sm popuptext' })
                 .on('click', { id: _markerID }, bind(this.addVenueToItineraryEvent, this)))
             .appendTo(markerText);
 

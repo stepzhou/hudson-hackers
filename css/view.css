@@ -1,0 +1,124 @@
+.popuptext {
+  font-family: 'Open Sans', sans-serif;
+  font-size:10pt;
+}
+
+.mapparent, #map {
+  height: 100%;
+}
+
+.sortable {
+  padding-top: 20px;
+}
+
+div > div:only-child > form:only-child > button[type="submit"] {
+  /* clear any floating implemented by the Twitter Bootstrap framework; you may
+     want to use the legacy clearfix method to make this work on all browsers */
+  clear: both;
+
+  /* redeclare the button as a block element */
+  display: block;
+
+  /* set a width (less than the width of its container; in this case, form).
+     this would help with centering the button */
+  width: 45%;
+
+  /* center the button. You can use a button group if you have more buttons */
+  margin: 0 auto;
+
+  /* center the text in the button, assuming it's not already centered by twitter */
+  text-align: center;
+}
+
+/* scrolling things */
+
+.row {
+  margin-right:0;
+  padding-right:15px;
+}
+
+.scroll {
+  padding:0;
+  height:100%;
+}
+
+/* formatting itinerary summary */
+
+.s_panel {
+  padding-bottom:2px;
+  padding-left:20px;
+}
+
+.description {
+}
+
+.address {
+}
+
+.rating {
+}
+
+.stats {
+}
+
+#emptymsg {
+  padding-top: 20px;
+  font-size: 18pt;
+  font-style: italic;
+  color: gray;
+}
+
+/* positioning the itineraries and buttons relatively */
+
+#collapse {
+  min-height:100px;
+}
+
+.right-bar {
+  /* lol rly, really? am I really doing this? REALLY? */
+  height: calc(100% - 150px);
+}
+
+#accordion {
+  height: 100%;
+  overflow:auto;
+  overflow-x:hidden;
+}
+
+#ibuttons {
+  min-height:50px;
+}
+
+.navbar-collapse {
+  margin-right:50%;
+}
+
+/* delete */
+
+.delete, .collapsible, .mapbutts {
+  padding:0;
+  border:none;
+  background:none;
+}
+
+.mapbutts {
+  padding-left:10px;
+  padding-right:10px;
+  font-size:34px;
+}
+
+#itinerary-name {
+  width:90%;
+  height:45px;
+  font-size:24px;
+}
+
+/* collapsible button formatting */
+
+.collapsible {
+  font-size:20pt;
+}
+
+a, a:visited {
+  font-weight: normal;
+}

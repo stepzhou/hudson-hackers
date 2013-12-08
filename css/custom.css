@@ -1,4 +1,7 @@
-html, body, .mapparent {
+@import url('http://fonts.googleapis.com/css?family=Open+Sans|Dosis:400,800');
+@import url('http://fonts.googleapis.com/css?family=Lato:300|Grand+Hotel|Droid+Serif');
+
+html, body {
   height: 100%;
    -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -10,10 +13,6 @@ footer, .push {
   height: 4em;
 }
 
-#map {
-  height: 100%;
-}
-
 .wrapper {
   min-height: 100%;
   height: auto !important;
@@ -21,17 +20,25 @@ footer, .push {
   margin: 0 auto -4em;
 }
 
+h1, h2, h3, h4 {
+  font-family: 'Droid Serif', serif;
+}
+
+a.navbar-brand {
+  font-family: 'Grand Hotel', cursive;
+  font-size: 26pt;
+  color:darkturquoise !important;
+  padding-top:17px;
+}
+
 body {
+  font-family: 'Open Sans', sans-serif;
   padding-top: 50px;
 }
 
 .starter-template {
   padding: 40px 15px;
   text-align: center;
-}
-
-.sortable {
-  padding-top: 20px;
 }
 
 div > div:only-child > form:only-child > button[type="submit"] {
@@ -53,95 +60,3 @@ div > div:only-child > form:only-child > button[type="submit"] {
   text-align: center;
 }
 
-/* scrolling things */
-
-.row {
-  margin-right:0;
-  padding-right:15px;
-}
-
-.scroll {
-  padding:0;
-  height:100%;
-}
-
-/* formatting itinerary summary */
-
-.s_panel {
-  padding-bottom:2px;
-  padding-left:20px;
-}
-
-.description {
-}
-
-.address {
-}
-
-.rating {
-}
-
-.stats {
-}
-
-#emptymsg {
-  padding-top: 20px;
-  font-size: 18pt;
-  font-style: italic;
-  color: gray;
-}
-
-/* positioning the itineraries and buttons relatively */
-
-#collapse {
-  min-height:100px;
-}
-
-.right-bar {
-  /* lol rly, really? am I really doing this? REALLY? */
-  height: calc(100% - 150px);
-}
-
-#accordion {
-  height: 100%;
-  overflow:auto;
-  overflow-x:hidden;
-}
-
-#ibuttons {
-  min-height:50px;
-}
-
-.navbar-collapse {
-  margin-right:50%;
-}
-
-/* delete */
-
-.delete, .collapsible, .mapbutts {
-  padding:0;
-  border:none;
-  background:none;
-}
-
-.mapbutts {
-  padding-left:10px;
-  padding-right:10px;
-  font-size:34px;
-}
-
-#itinerary-name {
-  width:90%;
-  height:45px;
-  font-size:24px;
-}
-
-/* collapsible button formatting */
-
-.collapsible {
-  font-size:20pt;
-}
-
-a, a:visited {
-  font-weight: normal;
-}
