@@ -17,9 +17,9 @@ div.sidebar-container {
     height : 80%;
     position:fixed;
     background-color:#4F8FFF;
-    filter: alpha(opacity=87);
-    -moz-opacity:0.87;
-    opacity:0.87;
+    filter: alpha(opacity=100);
+    -moz-opacity:1.00;
+    opacity:1.00;
     -moz-box-shadow:0px 0px 20px #4F8FFF;
     -webkit-box-shadow:0px 0px 20px #4F8FFF;
     box-shadow:0px 0px 20px #4F8FFF;
