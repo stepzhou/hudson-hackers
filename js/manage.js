@@ -10,10 +10,17 @@ $(function() {
 	var singleItinerary;
 	var singleVenue;
 	var currentItineraryOptions;
+	var emailBody;
 
 	for (var i = allItineraries.length - 1; i >= 0; i--) {
 
 		singleItinerary = allItineraries[i];
+		emailBody = "";
+		emailBody = singleItinerary.name + '%0D%0A';
+
+		for (var k = 0; k < singleItinerary.venues.length; k++) {
+			emailBody += '%0D%0A' + singleItinerary.venues[k].name;
+		}
 
 		// dropdown buttons
 		currentItineraryOptions = itineraryOptions;
@@ -21,6 +28,7 @@ $(function() {
 		currentItineraryOptions += '<li><a class="btn btn-default" href="view.html#' + singleItinerary.name + ' ">View</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="cloneItinerary(\'' + singleItinerary.name + '\')">Clone</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItineraryConfirm(\'' + singleItinerary.name + '\')">Delete</a></li>';
+		currentItineraryOptions += '<li><a class="btn btn-default" href="mailto: ?subject=Here\'s My PlanIt Itinerary!&body=' + emailBody + '" target="_blank">you@yourdomain.com</a>'
 		currentItineraryOptions += '</div></div>';
 		
 		// panel heading

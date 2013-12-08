@@ -8,9 +8,10 @@ $(document).ready(function () {
     }).sortable({items: '.s_panel'});
 
     var _markerID = 0;
-    var history = {};
-    var currentItinerary = {}; 
-    var markers = {};
+    var history = {}; //venue objects from foursquare search results
+    var currentItinerary = {}; //venue objects that have been selected
+    var pinkMarkers = {}; //pink markers, associated with selected venue objects
+    var blueMarkers = {}; //blue markers, associated with marker ids.
 
     /**
      * Itinerary view prototype
@@ -66,10 +67,11 @@ $(document).ready(function () {
             var venue = venue_string.split("=")[1];
 
             // get location
-            if (!location_string) {
-                var location = 'New York'; // default to New York if no location given
+            var location;
+            if (!!(location = location_string.split("=")[1]) ) {
+                ;
             } else { 
-                var location = location_string.split("=")[1];
+                location = 'New York'; // default to New York if no location given
             }
             
             document.getElementById("venue-text").value = venue;
@@ -124,7 +126,11 @@ $(document).ready(function () {
             }
             history = {};
 
-            this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
+            if (!centerVenue) {
+                this.map.setView([40.78, -73.97]);
+            } else {
+                this.map.setView([centerVenue.location.lat, centerVenue.location.lng], 13);
+            }
         }
 
         toggleEmptyItineraryMsg();
@@ -165,6 +171,7 @@ $(document).ready(function () {
     View.prototype.drawMarkers = function(venue) {
         this.markerLayer.clearLayers();
         var center = this.map.getCenter();
+        blueMarkers = {}; //resetting the blueMarkers dictionary for new search
         this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
     }
 
@@ -184,8 +191,11 @@ $(document).ready(function () {
      */
     View.prototype.addSearchResult = function(venue, venueID) {
         $("#search-results")
-            .append($('<li/>', {text: venue.name})
-            .on('click', { id: venueID }, bind(this.addVenueToItineraryEvent, this)));
+        .append($('<li/>', {text: venue.name})
+            .on('mouseenter', { id: venueID }, bind(this.highlightPossibleVenueEvent, this))
+            .on('mouseleave', { id: venueID }, bind(this.unHighlightPossibleVenueEvent, this))
+            .on('click', { id: venueID }, bind(this.addVenueToItineraryEvent, this))
+        );
     }
 
     /**
@@ -226,14 +236,88 @@ $(document).ready(function () {
             .on('click', function(e) { this.openPopup(); })
             .on('unclick', function(e) { this.closePopup(); });
         this.markerLayer.addLayer(marker);
+
+        blueMarkers[_markerID] = marker;
     }
 
-    /* Wrapper function for add to itinerary button in popup */
+    /**
+     * Wrapper function for highlighting venue in search results
+     */
+    View.prototype.highlightPossibleVenueEvent = function(event) {
+        this.highlightPossibleVenue(event.data.id);
+    }
+
+    /**
+     * Wrapper function for highlighting venue in search results
+     */
+    View.prototype.highlightPossibleVenue = function(venueID) {
+        var venue = history[venueID];
+
+        var latLng = new L.LatLng(venue.location.lat, venue.location.lng); 
+        var venue_name = venue.name;
+
+        if (!!venue.description) {
+          var venue_description = '<br/>' + venue.description;
+        }
+        else {
+          var venue_description = "";
+        }
+
+        var venue_link = venue.canonicalUrl;
+        var marker_text = '<div id="'  + venueID + '">';
+        marker_text += '<h5>' + venue_name + '</h5>';
+        marker_text += '<div>' + venue_description  + '</div>';
+        marker_text += '<div><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href="' + venue_link + '" target="_blank">FourSquare</a></div>';
+        marker_text += '</div>'
+
+        var saveIcon = L.icon({
+          iconUrl: 'lib/leaflet/images/save-marker-icon.png',
+          shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+          iconSize: [25,41],
+          shadowSize: [41,41],
+          iconAnchor: [12, 41],
+          shadowAnchor: [12,41],
+          popupAnchor: [0, -34]
+        });
+
+        var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
+            .bindPopup(marker_text)
+              .on('click', function(e) { this.openPopup(); })
+              .on('unclick', function(e) { this.closePopup(); })
+              ;
+        this.saveMarkerLayer.addLayer(marker);
+
+        marker.openPopup();
+
+        pinkMarkers[venueID] = marker;
+    }
+
+    /* 
+     * Wrapper function to turn off highlighting of a venue marker
+     */
+    View.prototype.unHighlightPossibleVenueEvent = function(event) {
+        this.unHighlightPossibleVenue(event.data.id);
+    }
+
+    /*
+     * Turns off the Highlighting of a Venue Marker
+     */
+    View.prototype.unHighlightPossibleVenue = function(venueID) {
+        var marker = pinkMarkers[venueID];
+        marker.closePopup();
+        this.saveMarkerLayer.removeLayer(marker);
+    }
+
+    /*
+     * Wrapper function for add to itinerary button in popup
+     */
     View.prototype.addVenueToItineraryEvent = function(event) {
         this.addVenueToItinerary(event.data.id);
     }
 
-    /* Adds an itinerary to the itinerary on the right */
+    /*  
+     * Adds an itinerary to the itinerary on the right
+     */
     View.prototype.addVenueToItinerary = function(venueID) {
         var params = {}
         var venue = history[venueID];
@@ -334,7 +418,7 @@ $(document).ready(function () {
               .on('unclick', function(e) { this.closePopup(); });
         this.saveMarkerLayer.addLayer(marker);
 
-        markers[key] = marker;
+        pinkMarkers[key] = marker;
     }
 
     /**
@@ -348,7 +432,7 @@ $(document).ready(function () {
 
         var link = document.URL;
         var value = $.jStorage.get("all", []);
-        
+
         var time = new Date();
         var itinerary = {};
         var venues = new Array();
@@ -370,10 +454,9 @@ $(document).ready(function () {
         // we replace the previously saved itinerary
         // with the updated itinerary
         if (link.match('#')) {
-            for (var i = 0; i < value.length; i++) {
+            for (var i = value.length - 1; i >= 0; i--) {
                 if (value[i].name === link.split("#")[1]) {
                     value.splice(i, 1, itinerary);
-                    // value[i] = itinerary;
                 }
             }
         } else {
@@ -383,7 +466,6 @@ $(document).ready(function () {
             for (var i = 0; i < value.length; i++) {
                 if (value[i].name === itName) {
                     value.splice(i, 1, itinerary);
-                    // value[i] = itinerary;
                     overwritten = true;
                 }
             }
@@ -406,11 +488,16 @@ $(document).ready(function () {
             // calling a private function, w/e yolo
             this.currentPopup._close();
         var venueID = event.data.id;
+console.log(event);
         // Stupid hack, wanna fite me over it??
         $('#' + venueID).remove();
         $('#' + venueID).remove();
-        this.saveMarkerLayer.removeLayer(markers[venueID]);
+console.log(pinkMarkers[venueID]);
+console.log(currentItinerary);
+console.log(currentItinerary[venueID]);
+        this.saveMarkerLayer.removeLayer(pinkMarkers[venueID]);
         delete currentItinerary[venueID];
+        delete pinkMarkers[venueID];
         toggleEmptyItineraryMsg();
     }
 
