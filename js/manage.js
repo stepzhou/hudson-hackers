@@ -1,6 +1,9 @@
+/**
+ * Populates the manage page with all itineraries
+ */
 $(function() {
 
-var itineraryOptions = '<div class="btn-group">';
+	var itineraryOptions = '<div class="btn-group">';
 	itineraryOptions += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>';
 
 	var allItineraries = $.jStorage.get("all", []);
@@ -8,16 +11,16 @@ var itineraryOptions = '<div class="btn-group">';
 	var singleVenue;
 	var currentItineraryOptions;
 
-	for (var i = 0; i < allItineraries.length; i++) {
+	for (var i = allItineraries.length - 1; i >= 0; i--) {
 
 		singleItinerary = allItineraries[i];
 
-		// dropdown
+		// dropdown buttons
 		currentItineraryOptions = itineraryOptions;
 		currentItineraryOptions += '<div class="dropdown-menu" role="menu">';
 		currentItineraryOptions += '<li><a class="btn btn-default" href="view.html#' + singleItinerary.name + ' ">View</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="cloneItinerary(\'' + singleItinerary.name + '\')">Clone</a></li>';
-		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItinerary(\'' + singleItinerary.name + '\')">Delete</a></li>';
+		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItineraryConfirm(\'' + singleItinerary.name + '\')">Delete</a></li>';
 		currentItineraryOptions += '</div></div>';
 		
 		// panel heading
@@ -37,6 +40,19 @@ var itineraryOptions = '<div class="btn-group">';
 	};
 });
 
+/**
+ * Require confirmation to delete an itinerary
+ */
+function deleteItineraryConfirm(itineraryName) {
+	var r = confirm("Are you sure you want to delete itinerary '" + itineraryName + "'?");
+	if (r == true) {
+	  deleteItinerary(itineraryName)
+	}
+}
+
+/**
+ * Deletes an itinerary from itineraries
+ */
 function deleteItinerary(itineraryName) {
 	console.log("We will delete " + itineraryName);
 	var allItineraries = $.jStorage.get("all", []);
@@ -55,6 +71,10 @@ function deleteItinerary(itineraryName) {
 
 	location.reload();
 }
+
+/**
+ * Creates a copy of the selected itinerary
+ */
 function cloneItinerary(itineraryName) {
 	console.log("We will clone " + itineraryName);
 	var allItineraries = $.jStorage.get("all", []);
@@ -76,7 +96,6 @@ function cloneItinerary(itineraryName) {
 			break;
 		}
 	}
-
 	location.reload();
+	$(this).scrollTop(0);
 }
-
