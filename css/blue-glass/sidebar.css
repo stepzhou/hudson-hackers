@@ -17,13 +17,13 @@ div.sidebar-container {
     height:80%;
     padding-top:150px;
     position:fixed;
-    background-color:#4F8FFF;
+    background-color:#222;
     filter: alpha(opacity=100);
     -moz-opacity:1.00;
     opacity:1.00;
-    -moz-box-shadow:0px 0px 20px #4F8FFF;
-    -webkit-box-shadow:0px 0px 20px #4F8FFF;
-    box-shadow:0px 0px 20px #4F8FFF;
+    -moz-box-shadow:0px 0px 10px #4F8FFF;
+    -webkit-box-shadow:0px 10px 0px #4F8FFF;
+    box-shadow:0px 0px 10px #4F8FFF;
 }
 
 div.sidebar-container.left {

@@ -28,7 +28,7 @@ $(function() {
 		currentItineraryOptions += '<li><a class="btn btn-default" href="view.html#' + singleItinerary.name + ' ">View</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="cloneItinerary(\'' + singleItinerary.name + '\')">Clone</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItineraryConfirm(\'' + singleItinerary.name + '\')">Delete</a></li>';
-		currentItineraryOptions += '<li><a class="btn btn-default" href="mailto: ?subject=Here\'s My PlanIt Itinerary!&body=' + emailBody + '" target="_blank">you@yourdomain.com</a>'
+		currentItineraryOptions += '<li><a class="btn btn-default" href="mailto: ?subject=Here\'s My PlanIt Itinerary!&body=' + emailBody + '" target="_blank">Mail Itinerary</a>'
 		currentItineraryOptions += '</div></div>';
 		
 		// panel heading
