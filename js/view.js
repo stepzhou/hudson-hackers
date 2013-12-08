@@ -66,7 +66,7 @@ $(document).ready(function () {
             var venue = venue_string.split("=")[1];
 
             // get location
-            if (!location_string) { 
+            if (!location_string) {
                 var location = 'New York'; // default to New York if no location given
             } else { 
                 var location = location_string.split("=")[1];
@@ -158,6 +158,7 @@ $(document).ready(function () {
             return false;
         });
     }
+
     /**
      * Draws markers given a list of venues
      */
@@ -171,6 +172,8 @@ $(document).ready(function () {
      * Iterates through venue results to add venue marker
      */
     View.prototype.onVenues = function(venues) {
+        $(".break").prepend($('<li/><br/></li>'));
+
         for (var i = 0; i < venues.length; i++) {
             this.foursquare.getVenueInformation(venues[i].id, bind(this.addVenueMarker, this));        
         }
@@ -189,7 +192,6 @@ $(document).ready(function () {
      * Adds venue markers to the map
      */
     View.prototype.addVenueMarker = function(venue) {
-
         var latLng = new L.LatLng(venue.location.lat, venue.location.lng);
         var venue_name = venue.name;
 
@@ -346,7 +348,7 @@ $(document).ready(function () {
 
         var link = document.URL;
         var value = $.jStorage.get("all", []);
-
+        
         var time = new Date();
         var itinerary = {};
         var venues = new Array();
@@ -371,12 +373,26 @@ $(document).ready(function () {
             for (var i = 0; i < value.length; i++) {
                 if (value[i].name === link.split("#")[1]) {
                     value.splice(i, 1, itinerary);
+                    // value[i] = itinerary;
                 }
             }
         } else {
+            var overwritten = false; 
+
+            // overwrite existing 
+            for (var i = 0; i < value.length; i++) {
+                if (value[i].name === itName) {
+                    value.splice(i, 1, itinerary);
+                    // value[i] = itinerary;
+                    overwritten = true;
+                }
+            }
+
             // else, this is a new itinerary, and push it
             // to the end of our locally stored object
-            value.push(itinerary);
+            if (!overwritten) {
+                value.push(itinerary);
+            }
         }
         $.jStorage.set("all", value);
         alert("Itinerary Saved!");
@@ -456,17 +472,20 @@ $(document).ready(function () {
         $("#accordion div.s_panel").accordion("option", "active", 0);
     }
 
+    /**
+     * Clears search results from map and list
+     */
     View.prototype.clearMarkersHook = function() {
         var that = this;
         $("#clearmarkers").on('click', function() {
             that.markerLayer.clearLayers();
+            $("#search-results li").remove();
         });
     }
 
     View.prototype.setSearchResultPanel = function() {
         $("#search-results").sidebar({
-        position:"right",
-        open:"click",
+        position:"right"
         // callback:{
         // item : {
         // enter : function(){
@@ -480,6 +499,10 @@ $(document).ready(function () {
         });
     }
 
+    /**
+     * Either displays that current itinerary is empty, 
+     * or clears the text of the empty message.
+     */
     function toggleEmptyItineraryMsg() {
         if (jQuery.isEmptyObject(currentItinerary))
             $('#emptymsg').text('Your itinerary is empty. Search and add results above!');
