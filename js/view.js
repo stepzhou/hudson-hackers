@@ -158,6 +158,7 @@ $(document).ready(function () {
             return false;
         });
     }
+
     /**
      * Draws markers given a list of venues
      */
@@ -456,6 +457,9 @@ $(document).ready(function () {
         $("#accordion div.s_panel").accordion("option", "active", 0);
     }
 
+    /**
+     * Clears search results from map and list
+     */
     View.prototype.clearMarkersHook = function() {
         var that = this;
         $("#clearmarkers").on('click', function() {
@@ -480,6 +484,10 @@ $(document).ready(function () {
         });
     }
 
+    /**
+     * Either displays that current itinerary is empty, 
+     * or clears the text of the empty message.
+     */
     function toggleEmptyItineraryMsg() {
         if (jQuery.isEmptyObject(currentItinerary))
             $('#emptymsg').text('Your itinerary is empty. Search and add results above!');
