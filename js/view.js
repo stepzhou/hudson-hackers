@@ -214,14 +214,7 @@
 
         var markerText = $('<div/>', { id: ++_markerID });
         $('<h4/>', { text: venue.name }).appendTo(markerText);
-
-        if (!!venue.description)
-            $('<div/>', { text: venue.description, class: 'popuptext' }).appendTo(markerText);
-
-        $('<div/>')
-            .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
-            .append($('<a/>', { text: 'Foursquare', class: 'popuptext', href: venue.canonicalUrl } ))
-            .appendTo(markerText);
+        this.getSummaryDiv(venue).appendTo(markerText);
 
         $('<div/>')
             .append($('<button/>', { text: 'Add to Itinerary', class: 'btn btn-default btn-sm popuptext' })
@@ -264,12 +257,9 @@
           var venue_description = "";
         }
 
-        var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + venueID + '">';
-        marker_text += '<h5>' + venue_name + '</h5>';
-        marker_text += '<div>' + venue_description  + '</div>';
-        marker_text += '<div><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href="' + venue_link + '" target="_blank">FourSquare</a></div>';
-        marker_text += '</div>'
+        var markerText = $('<div/>', { id: ++_markerID });
+        $('<h4/>', { text: venue.name }).appendTo(markerText);
+        this.getSummaryDiv(venue).appendTo(markerText);
 
         var saveIcon = L.icon({
           iconUrl: 'lib/leaflet/images/save-marker-icon.png',
@@ -282,7 +272,7 @@
         });
 
         var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
-            .bindPopup(marker_text)
+            .bindPopup(markerText[0])
               .on('click', function(e) { this.openPopup(); })
               .on('unclick', function(e) { this.closePopup(); })
               ;
@@ -334,36 +324,7 @@
             .appendTo(html)
         ).appendTo(html);
                 
-        var accordionDiv = $('<div/>').appendTo(html);
-
-        if (venue.description)
-            $('<div/>', { 
-                text: venue.description,
-                class: 'description'
-            }).appendTo(accordionDiv);
-
-        if (venue.location.address) 
-            $('<div/>', { 
-                text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
-                class: 'address'
-            }).appendTo(accordionDiv);
-
-        if (venue.rating)
-            $('<div/>', {
-                text: venue.rating + ' / 10 rating',
-                class: 'rating'
-            }).appendTo(accordionDiv);
-
-        $('<div/>', {
-            text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
-            class: 'stats'
-        }).appendTo(accordionDiv);
-
-        if (venue.categories.length > 0)
-            $('<div/>', { 
-                text: venue.categories.map(function(x) { return x.name; }).join(", "),
-                class: 'categories'
-            }).appendTo(accordionDiv);
+        var accordionDiv = this.getSummaryDiv(venue).appendTo(html);
 
         // accordion everything again
         $("#accordion #" + venueID).accordion({
@@ -377,6 +338,45 @@
         currentItinerary[venueID] = history[venueID]; // adds selected venue to array 
         toggleEmptyItineraryMsg();
         this.addItineraryMarker(venueID);
+    }
+
+    View.prototype.getSummaryDiv = function(venue) {
+        var summaryDiv = $('<div/>');
+
+        if (venue.description)
+            $('<div/>', { 
+                text: venue.description,
+                class: 'description'
+            }).appendTo(summaryDiv);
+
+        if (venue.location.address) 
+            $('<div/>', { 
+                text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
+                class: 'address'
+            }).appendTo(summaryDiv);
+
+        if (venue.rating)
+            $('<div/>', {
+                text: venue.rating + ' / 10 rating',
+                class: 'rating'
+            }).appendTo(summaryDiv);
+
+        $('<div/>', {
+            text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
+            class: 'stats'
+        }).appendTo(summaryDiv);
+
+        if (venue.categories.length > 0)
+            $('<div/>', { 
+                text: venue.categories.map(function(x) { return x.name; }).join(", "),
+                class: 'categories'
+            }).appendTo(summaryDiv);
+
+        $('<div/>')
+            .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
+            .append($('<a/>', { text: ' Foursquare', class: 'foursquare', href: venue.canonicalUrl } ))
+            .appendTo(summaryDiv);
+        return summaryDiv;
     }
 
     /**
@@ -395,12 +395,9 @@
           var venue_description = "";
         }
 
-        var venue_link = venue.canonicalUrl;
-        var marker_text = '<div id="'  + (key) + '">';
-        marker_text += '<b>' + venue_name + '</b>';
-        marker_text += venue_description;
-        marker_text += '<br><img src="https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png"><a href=' + venue_link + ' target="_blank">FourSquare</a>';
-        marker_text += '</div>'
+        var markerText = $('<div/>', { id: ++_markerID });
+        $('<h4/>', { text: venue.name }).appendTo(markerText);
+        this.getSummaryDiv(venue).appendTo(markerText);
 
         var saveIcon = L.icon({
           iconUrl: 'lib/leaflet/images/save-marker-icon.png',
@@ -413,7 +410,7 @@
         });
 
         var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
-            .bindPopup(marker_text)
+            .bindPopup(markerText[0])
               //.bindPopup(venue['name'])
               .on('click', function(e) { this.openPopup(); })
               .on('unclick', function(e) { this.closePopup(); });

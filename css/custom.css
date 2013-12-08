@@ -38,6 +38,22 @@ h1, h2, h3, h4 {
   font-family: 'Droid Serif', serif;
 }
 
+.page-header {
+  font-family: 'Droid Serif', serif;
+  margin:30px;
+  font-size:50pt;
+}
+
+.panel-title {
+  font-size:22pt;
+  font-family: 'Droid Serif', serif;
+}
+
+ul.manageli {
+  list-style-type:none;
+  font-size:15pt;
+}
+
 a.navbar-brand {
   font-family: 'Grand Hotel', cursive;
   font-size: 26pt;
@@ -48,11 +64,6 @@ a.navbar-brand {
 body {
   font-family: 'Open Sans', sans-serif;
   padding-top: 50px;
-}
-
-.starter-template {
-  padding: 40px 15px;
-  text-align: center;
 }
 
 div > div:only-child > form:only-child > button[type="submit"] {

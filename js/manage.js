@@ -35,13 +35,14 @@ $(function() {
 		$(".user-itineraries").append('<div class="panel panel-info" style="width: 600px;">' 
 									  + '<div class="panel-heading" style="width: 600px; padding-left:90px">'
 									  + '<div class="dropdown pull-right">' + currentItineraryOptions + '</div>'
-									  + '<div class="panel-title" style="font-size: 20pt">' + singleItinerary.name + '</div>' 
+									  + '<div class="panel-title">' + singleItinerary.name + '</div>' 
 									  + '</div>');
 
 		// venues
+                var ul = $('<ul/>', { class: 'manageli' }).appendTo(".user-itineraries");
 		for (var j = 0; j < singleItinerary.venues.length; j++) {
 			singleVenue = singleItinerary.venues[j];
-			$(".user-itineraries").append('<li>' + singleVenue.name+ '</li>');
+			ul.append('<li>' + singleVenue.name+ '</li>');
 		};
 		$(".user-itineraries").append('<br>');
 		console.log("i: " + i + ", singleItinerary.name: " + singleItinerary.name);

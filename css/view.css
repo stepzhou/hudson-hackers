@@ -122,3 +122,7 @@ div > div:only-child > form:only-child > button[type="submit"] {
 a, a:visited {
   font-weight: normal;
 }
+
+a.foursquare {
+  color:#00008B !important;
+}
