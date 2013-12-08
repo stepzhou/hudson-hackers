@@ -460,6 +460,7 @@ $(document).ready(function () {
         var that = this;
         $("#clearmarkers").on('click', function() {
             that.markerLayer.clearLayers();
+            $("#search-results li").remove();
         });
     }
 
