@@ -408,7 +408,8 @@
           iconSize: [25,41],
           shadowSize: [41,41],
           iconAnchor: [12, 41],
-          shadowAnchor: [12,41]
+          shadowAnchor: [0,41],
+          popupAnchor: [0, -34]
         });
 
         var marker = new L.Marker(latLng, {icon: saveIcon, zIndexOffset: 1000, title:venue_name, riseOnHover:true})
