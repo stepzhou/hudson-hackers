@@ -17,7 +17,7 @@ var itineraryOptions = '<div class="btn-group">';
 		currentItineraryOptions += '<div class="dropdown-menu" role="menu">';
 		currentItineraryOptions += '<li><a class="btn btn-default" href="view.html#' + singleItinerary.name + ' ">View</a></li>';
 		currentItineraryOptions += '<li><a class="btn btn-default" onclick="cloneItinerary(\'' + singleItinerary.name + '\')">Clone</a></li>';
-		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItinerary(\'' + singleItinerary.name + '\')">Delete</a></li>';
+		currentItineraryOptions += '<li><a class="btn btn-default" onclick="deleteItineraryConfirm(\'' + singleItinerary.name + '\')">Delete</a></li>';
 		currentItineraryOptions += '</div></div>';
 		
 		// panel heading
@@ -36,6 +36,13 @@ var itineraryOptions = '<div class="btn-group">';
 		console.log("i: " + i + ", singleItinerary.name: " + singleItinerary.name);
 	};
 });
+
+function deleteItineraryConfirm(itineraryName) {
+	var r = confirm("Are you sure you want to delete itinerary '" + itineraryName + "'?");
+	if (r == true) {
+	  deleteItinerary(itineraryName)
+	}
+}
 
 function deleteItinerary(itineraryName) {
 	console.log("We will delete " + itineraryName);
@@ -76,7 +83,7 @@ function cloneItinerary(itineraryName) {
 			break;
 		}
 	}
-
 	location.reload();
+	$(this).scrollTop(0);
 }
 
