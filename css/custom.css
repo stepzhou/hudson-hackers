@@ -1,5 +1,19 @@
 @import url('http://fonts.googleapis.com/css?family=Open+Sans|Dosis:400,800');
 @import url('http://fonts.googleapis.com/css?family=Lato:300|Grand+Hotel|Droid+Serif');
+/* Custom container */
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.navbar-brand {
+  padding-left:40px;
+  padding-right:140px;
+}
+
+.pull-right {
+  padding-right:40px;
+}
 
 html, body {
   height: 100%;
@@ -60,3 +74,12 @@ div > div:only-child > form:only-child > button[type="submit"] {
   text-align: center;
 }
 
+
+.splash-title {
+  padding-top:70px;
+  -webkit-text-stroke: 1.5px #FFFFFF;
+  -webkit-text-fill-color: darkturquoise;
+  font-size: 200px;
+  font-family: 'Grand Hotel', cursive;
+  height:320px;
+}
