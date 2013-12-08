@@ -33,7 +33,7 @@ $(function() {
 		
 		// panel heading
 		$(".user-itineraries").append('<div class="panel panel-info" style="width: 600px;">' 
-									  + '<div class="panel-heading" style="width: 600px; padding-left:90px">'
+									  + '<div class="panel-heading" style="width: 600px; padding-left:125px">'
 									  + '<div class="dropdown pull-right">' + currentItineraryOptions + '</div>'
 									  + '<div class="panel-title">' + singleItinerary.name + '</div>' 
 									  + '</div>');

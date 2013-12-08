@@ -126,3 +126,7 @@ a, a:visited {
 a.foursquare {
   color:#00008B !important;
 }
+
+div.summary {
+  padding:1.5px;
+}

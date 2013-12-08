@@ -346,35 +346,35 @@
         if (venue.description)
             $('<div/>', { 
                 text: venue.description,
-                class: 'description'
+                class: 'description summary'
             }).appendTo(summaryDiv);
 
         if (venue.location.address) 
             $('<div/>', { 
                 text: venue.location.address + ', ' + venue.location.city + ', ' + venue.location.state,
-                class: 'address'
+                class: 'address summary'
             }).appendTo(summaryDiv);
 
         if (venue.rating)
             $('<div/>', {
                 text: venue.rating + ' / 10 rating',
-                class: 'rating'
+                class: 'rating summary'
             }).appendTo(summaryDiv);
 
         $('<div/>', {
             text:  venue.stats.checkinsCount + ' checkins across ' + venue.stats.usersCount + ' users',
-            class: 'stats'
+            class: 'stats summary'
         }).appendTo(summaryDiv);
 
         if (venue.categories.length > 0)
             $('<div/>', { 
                 text: venue.categories.map(function(x) { return x.name; }).join(", "),
-                class: 'categories'
+                class: 'categories summary'
             }).appendTo(summaryDiv);
 
         $('<div/>')
             .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
-            .append($('<a/>', { text: ' Foursquare', class: 'foursquare', href: venue.canonicalUrl } ))
+            .append($('<a/>', { text: ' Foursquare', class: 'summary foursquare', href: venue.canonicalUrl } ))
             .appendTo(summaryDiv);
         return summaryDiv;
     }
