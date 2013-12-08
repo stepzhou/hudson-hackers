@@ -66,10 +66,10 @@ $(document).ready(function () {
             var venue = venue_string.split("=")[1];
 
             // get location
-            if (!location_string) { 
-                var location = location_string.split("=")[1];
-            } else { 
+            if (!location_string) {
                 var location = 'New York'; // default to New York if no location given
+            } else { 
+                var location = location_string.split("=")[1];
             }
             
             document.getElementById("venue-text").value = venue;
