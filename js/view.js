@@ -231,10 +231,6 @@ $(document).ready(function () {
 
         this.addSearchResult(venue, _markerID);
 
-console.log("markerText");
-console.log(markerText);
-console.log("markerText[0]");
-console.log(markerText[0]);
         var marker = new L.Marker(latLng, {title:venue_name, riseOnHover:true})
             .bindPopup(markerText[0])
             .on('click', function(e) { this.openPopup(); })
@@ -244,12 +240,16 @@ console.log(markerText[0]);
         blueMarkers[_markerID] = marker;
     }
 
-    /* Wrapper function for highlighting venue in search results */
+    /**
+     * Wrapper function for highlighting venue in search results
+     */
     View.prototype.highlightPossibleVenueEvent = function(event) {
         this.highlightPossibleVenue(event.data.id);
     }
 
-    /* Highlights a venue marker when user hovers over corresponding search result */
+    /**
+     * Wrapper function for highlighting venue in search results
+     */
     View.prototype.highlightPossibleVenue = function(venueID) {
         var venue = history[venueID];
 
@@ -264,7 +264,6 @@ console.log(markerText[0]);
         }
 
         var venue_link = venue.canonicalUrl;
-console.log(venue_link);
         var marker_text = '<div id="'  + venueID + '">';
         marker_text += '<h5>' + venue_name + '</h5>';
         marker_text += '<div>' + venue_description  + '</div>';
@@ -277,14 +276,12 @@ console.log(venue_link);
           iconSize: [25,41],
           shadowSize: [41,41],
           iconAnchor: [12, 41],
-          shadowAnchor: [12,41]
+          shadowAnchor: [12,41],
+          popupAnchor: [0, -34]
         });
 
-console.log(marker_text);
-    // FIX SAVE ICON
         var marker = new L.Marker(latLng, {icon: saveIcon, title:venue_name, riseOnHover:true})
             .bindPopup(marker_text)
-              //.bindPopup(venue['name'])
               .on('click', function(e) { this.openPopup(); })
               .on('unclick', function(e) { this.closePopup(); })
               ;
@@ -295,26 +292,32 @@ console.log(marker_text);
         pinkMarkers[venueID] = marker;
     }
 
-    /*Wrapper function to turn off highlighting of a venue marker*/
+    /* 
+     * Wrapper function to turn off highlighting of a venue marker
+     */
     View.prototype.unHighlightPossibleVenueEvent = function(event) {
         this.unHighlightPossibleVenue(event.data.id);
     }
 
-    /* Turns off the Highlighting of a Venue Marker */
+    /*
+     * Turns off the Highlighting of a Venue Marker
+     */
     View.prototype.unHighlightPossibleVenue = function(venueID) {
-        // this.saveMarkerLayer.removeLayer(pinkMarkers[venueID]);
         var marker = pinkMarkers[venueID];
         marker.closePopup();
         this.saveMarkerLayer.removeLayer(marker);
-console.log("removed pink highlighting");
     }
 
-    /* Wrapper function for add to itinerary button in popup */
+    /*
+     * Wrapper function for add to itinerary button in popup
+     */
     View.prototype.addVenueToItineraryEvent = function(event) {
         this.addVenueToItinerary(event.data.id);
     }
 
-    /* Adds an itinerary to the itinerary on the right */
+    /*  
+     * Adds an itinerary to the itinerary on the right
+     */
     View.prototype.addVenueToItinerary = function(venueID) {
         var params = {}
         var venue = history[venueID];
@@ -489,7 +492,6 @@ console.log("removed pink highlighting");
         $('#' + venueID).remove();
         $('#' + venueID).remove();
         this.saveMarkerLayer.removeLayer(pinkMarkers[venueID]);
-console.log("remove pinkMarker from delete");
         delete currentItinerary[venueID];
         toggleEmptyItineraryMsg();
     }
