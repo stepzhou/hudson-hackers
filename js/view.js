@@ -164,7 +164,6 @@
                     var locCenter = reply[0]['feature']['geometry']['center'];
                     that.map.setView(locCenter, 13);
                     that.drawMarkers(venue);
-                    console.log(locCenter.lat);
                 });
             }
             return false;
@@ -491,13 +490,9 @@
             // calling a private function, w/e yolo
             this.currentPopup._close();
         var venueID = event.data.id;
-console.log(event);
         // Stupid hack, wanna fite me over it??
         $('#' + venueID).remove();
         $('#' + venueID).remove();
-console.log(pinkMarkers[venueID]);
-console.log(currentItinerary);
-console.log(currentItinerary[venueID]);
         this.saveMarkerLayer.removeLayer(pinkMarkers[venueID]);
         delete currentItinerary[venueID];
         delete pinkMarkers[venueID];
