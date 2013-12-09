@@ -482,7 +482,7 @@
         }
         $.jStorage.set("all", value);
 
-        $(".badge").replaceWith('<span class="badge">' + itineraries.length + '</span>');
+        $(".badge").replaceWith('<span class="badge">' + value.length + '</span>');
 
 
         alert("Itinerary Saved!");
