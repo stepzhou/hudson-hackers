@@ -33,6 +33,12 @@
             maxZoom: 15
         }).addTo(map);
 
+        this.zoomRadius = {12: 9000,
+                           13: 6000,
+                           14: 2000,
+                           15: 1000,
+                           16: 500};
+
         // To close popup when remove, ya anthr var wat u gun do abt it, huh??
         this.currentPopup;
         map.on("popupopen", bind(function(evt) { this.currentPopup = evt.popup; }, this));
@@ -179,7 +185,11 @@
         this.markerLayer.clearLayers();
         var center = this.map.getCenter();
         blueMarkers = {}; //resetting the blueMarkers dictionary for new search
-        this.foursquare.searchVenues(center.lat, center.lng, venue, bind(this.onVenues, this));
+        if (this.zoomRadius[this.map.getZoom()])
+            var radius = this.zoomRadius[this.map.getZoom()];
+        else
+            var radius = 8000;
+        this.foursquare.searchVenues(center.lat, center.lng, venue, radius, bind(this.onVenues, this));
     }
 
     /**
@@ -380,7 +390,7 @@
 
         $('<div/>')
             .append($('<img/>', { src: 'https://playfoursquare.s3.amazonaws.com/press/logo/icon-16x16.png'} ))
-            .append($('<a/>', { text: ' Foursquare', class: 'summary foursquare', href: venue.canonicalUrl } ))
+            .append($('<a/>', { text: ' Foursquare', class: 'summary foursquare', target: "_blank", href: venue.canonicalUrl } ))
             .appendTo(summaryDiv);
         return summaryDiv;
     }
