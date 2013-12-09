@@ -143,6 +143,11 @@
     View.prototype.searchForm = function() {
         // 'that' hack since bind doesn't work with this, so wat
         var that = this;
+        
+        $('#currentloc').on('click', function() {
+            document.getElementById("location-text").value = 'Current';
+        }); 
+
         $('#search-form').submit(function () {
             history = {};
             $("#search-results li").remove();
@@ -151,7 +156,7 @@
 
             // TODO: validate venues
             // get location; if null, use a default for now
-            if (!location) { 
+            if (!location || location == "Current") { 
                 location = 'New York';
                 that.drawMarkers(venue);
             } else {
@@ -183,7 +188,7 @@
         $(".break").prepend($('<li/><br/></li>'));
 
         for (var i = 0; i < venues.length; i++) {
-            this.foursquare.getVenueInformation(venues[i].id, bind(this.addVenueMarker, this));        
+            this.foursquare.getVenueInformation(venues[i].venue.id, bind(this.addVenueMarker, this));        
         }
     }
 
