@@ -8,7 +8,7 @@
 
 .navbar-brand {
   padding-left:40px;
-  padding-right:140px;
+  padding-right:110px;
 }
 
 .pull-right {
@@ -93,4 +93,8 @@ div > div:only-child > form:only-child > button[type="submit"] {
   font-size: 200px;
   font-family: 'Grand Hotel', cursive;
   height:320px;
+}
+
+.inline {
+  display:inline-block;
 }
