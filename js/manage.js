@@ -11,6 +11,8 @@ $(function() {
 	var singleVenue;
 	var currentItineraryOptions;
 	var emailBody;
+	$(".badge").replaceWith('<span class="badge">' + allItineraries.length + '</span>');
+
 
 	for (var i = allItineraries.length - 1; i >= 0; i--) {
 

@@ -94,10 +94,12 @@
     View.prototype.preloadForm = function() { 
         var link = document.URL;
 
+        var itineraries = $.jStorage.get("all", []);
+        $(".badge").replaceWith('<span class="badge">' + itineraries.length + '</span>');
+
         if (link.match('#')) {
             var result = link.split('#');
             var itineraryName = result[1]; 
-            var itineraries = $.jStorage.get("all", []);
             var itinerary; 
 
             for (var i = 0; i < itineraries.length; i++) {
@@ -475,6 +477,10 @@
             }
         }
         $.jStorage.set("all", value);
+
+        $(".badge").replaceWith('<span class="badge">' + itineraries.length + '</span>');
+
+
         alert("Itinerary Saved!");
     }
 
