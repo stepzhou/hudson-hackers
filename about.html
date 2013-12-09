@@ -5,19 +5,19 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="css/custom.css" />
+</script>
 </head>
-
-<body>
+<body>  
   <div class="container-full">
     <div class="navbar navbar-inverse navbar-fixed-top">
        <div class="navbar-header">
         <a class="navbar-brand" href="/index.html">PlanIt</a>
       </div>
-      <form id="search-form" class="navbar-form navbar-left" role="search">
+      <form id="search-form" class="navbar-form navbar-left" role="form" action="/view.html" method="get" style="color: black;">
         <div class="form-group">
           <input id="venue-text" type="text" class="form-control" placeholder="Venue">
         </div>
-        <span style="color:white">near</span>
+          <span style="color:white">near</span>
         <div class="form-group">
           <input id="location-text" type="text" class="form-control" placeholder="Location">
         </div>
@@ -25,7 +25,7 @@
       </form>
       <ul class="nav navbar-nav pull-right">
         <!-- <li><a href="/view.html">New</a></li> -->
-        <li><a href="/manage.html">Manage</a></li>
+        <li><a href="/manage.html">Manage <span class="badge">0</span> </a></li>
         <li class="active"><a href="/about.html">About</a></li>
       </ul>
     </div>
@@ -50,16 +50,17 @@
         <div class="col-lg-6">
           <h2>How to Use PlanIt</h2>
           <p>PlanIt is the best way to make the most of the special moments in life, namely events that require extra planning: road trips, anniversaries, visits from relatives, and more. This app allows users to organize locations into editable itineraries.</p>
-          <p><a class="btn btn-default" href="#">Check out the user guide! &raquo;</a></p>
+          <p>
+            <a class="btn btn-default" href="javascript:void(0);" onclick="javascipt:window.open('/docs/UserManual.pdf');" class="popup">Check out the user guide!&raquo;</a>
+          </p>
         </div>
         <div class="col-lg-6">
           <h2>Team</h2>
-          <p>Sean Wong<a href="http://www.linkedin.com/pub/sean-wong/43/340/12b"></a> is a senior studying computer science at Columbia University. He enjoys long walks on the moon, and eats cereal for breakfast.</p>
-          <p>Stephen Zhou<a href="https://www.linkedin.com/pub/stephen-zhou/45/985/7ba"></a></p>
-          <p>Will McAuliff<a href="http://will.mcauliff.org/"></a></p>
-          <p>Emily Schultz</p>
-          <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
-       </div>
+          <li><a href="http://www.linkedin.com/pub/sean-wong/43/340/12b">Sean Wong</a> is a senior studying computer science at Columbia University. He enjoys long walks on the moon, and eats cereal for breakfast.</p>
+          <li> <a href="https://www.linkedin.com/pub/stephen-zhou/45/985/7ba">Stephen Zhou</a> is a senior studying computer science at Columbia University. He doesn't like you.</p>
+          <li> <a href="http://will.mcauliff.org/">Will McAuliff</a> is a senior studying computer science at Columbia University. He has a level 100 Charizard and wants to be the very best, like no one ever was.</p>
+          <li> <a href="https://foursquare.com/smallstar84">Emily Schultz</a> is a senior studying computer science at Columbia University. She can tweet and check in like no one's business. She's the libero on this team.</p>
+        </div>
       </div>
 
     <div class="push"></div>
@@ -68,9 +69,10 @@
   <div class="footer" align="center">
     <p>&copy; The Hudson Hackers, LLC 2013</p>
   </div>
-
   <script src="lib/jquery/jquery-1.10.2.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/jstorage/jstorage.min.js"></script>
   <script src="js/configs.js"></script>
+  <script src="js/about.js"></script>
 </body>
 </html>
