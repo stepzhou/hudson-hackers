@@ -82,7 +82,7 @@
             }
 
             document.getElementById("venue-text").value = decodeURIComponent(venue).split("+").join(" ");
-            document.getElementById("location-text").value = decodeURIComponent(location).replace("+", " ");
+            document.getElementById("location-text").value = decodeURIComponent(location).split("+").join(" ");
 
             // get the geocode for the location and update the map
             var that = this;
