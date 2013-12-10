@@ -122,6 +122,7 @@ ul.sidebar-menu {
 
 ul.sidebar-menu li{
     line-height:1.5em;
+    cursor: pointer;
 }
 
 a,a:visited {

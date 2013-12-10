@@ -47,6 +47,7 @@ div > div:only-child > form:only-child > button[type="submit"] {
 .s_panel {
   padding-bottom:2px;
   padding-left:20px;
+  cursor: pointer;
 }
 
 .description {
