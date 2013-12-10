@@ -478,6 +478,7 @@
 
         if (!itName) {
             itinerary['name'] = "Default";
+            itName = "Default"
         } else {
             itinerary['name'] = itName;
         }
