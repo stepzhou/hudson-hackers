@@ -80,9 +80,9 @@
             } else { 
                 location = 'New York'; // default to New York if no location given
             }
-            
-            document.getElementById("venue-text").value = venue;
-            document.getElementById("location-text").value = location;
+
+            document.getElementById("venue-text").value = decodeURIComponent(venue).split("+").join(" ");
+            document.getElementById("location-text").value = decodeURIComponent(location).replace("+", " ");
 
             // get the geocode for the location and update the map
             var that = this;
