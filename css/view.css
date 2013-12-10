@@ -120,6 +120,8 @@ div > div:only-child > form:only-child > button[type="submit"] {
   font-size:20pt;
 }
 
+/* random */
+
 a, a:visited {
   font-weight: normal;
 }
@@ -130,4 +132,15 @@ a.foursquare {
 
 div.summary {
   padding:1.5px;
+}
+
+/* sidebar */
+
+ul.sidebar-menu u h2 {
+  margin-top:0px;
+  margin-bottom:5px;
+}
+
+.sidebar-body {
+  height: calc(100% - 40px) !important;
 }
