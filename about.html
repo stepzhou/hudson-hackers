@@ -13,13 +13,13 @@
        <div class="navbar-header">
         <a class="navbar-brand" href="/index.html">PlanIt</a>
       </div>
-      <form id="search-form" class="navbar-form navbar-left" role="form" action="/view.html" method="get" style="color: black;">
+      <form id="search-form" class="navbar-form navbar-left form-inline" role="form" action="/view.html" method="get">
         <div class="form-group">
-          <input id="venue-text" type="text" class="form-control" placeholder="Venue">
+          <input id="venue-text" name="venue" type="text" class="form-control" placeholder="venue">
         </div>
           <span style="color:white">near</span>
         <div class="form-group">
-          <input id="location-text" type="text" class="form-control" placeholder="Location">
+          <input id="location-text" name="location" type="text" class="form-control" placeholder="location">
         </div>
         <button type="submit" class="btn btn-danger">Start New Itinerary</button>
       </form>
