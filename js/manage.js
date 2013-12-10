@@ -18,10 +18,19 @@ $(function() {
 
 		singleItinerary = allItineraries[i];
 		emailBody = "";
-		emailBody = singleItinerary.name + '%0D%0A';
+		emailBody = '%0D%0A%22' + singleItinerary.name + '%22%0D%0A';
+
+console.log(singleItinerary);
 
 		for (var k = 0; k < singleItinerary.venues.length; k++) {
-			emailBody += '%0D%0A' + singleItinerary.venues[k].name;
+			singleVenue = singleItinerary.venues[k];
+console.log(singleVenue);
+			emailBody += '%0D%0A%0D%0A%0D%0A' + singleVenue.name + ' [' + singleVenue.shortUrl + ']';
+console.log(emailBody);
+			emailBody += '%0D%0A' + singleVenue.location.address;
+console.log(emailBody)
+			emailBody += '%0D%0A' + singleVenue.location.city + ', ' + singleVenue.location.state + ' ' + singleVenue.location.postalCode;
+			emailBody += '%0D%0A' + singleVenue.location.country;
 		}
 
 		// dropdown buttons
