@@ -154,6 +154,24 @@
         
         $('#currentloc').on('click', function() {
             document.getElementById("location-text").value = 'Current';
+            history = {};
+            $("#search-results li").remove();
+            var venue = $('#venue-text').val(),
+            location = $('#location-text').val();
+
+            // TODO: validate venues
+            // get location; if null, use a default for now
+            if (!location || location == "Current") { 
+                location = 'New York';
+                that.drawMarkers(venue);
+            } else {
+                that.foursquare.geocode(location, function(reply) {
+                    var locCenter = reply[0]['feature']['geometry']['center'];
+                    that.map.setView(locCenter, 13);
+                    that.drawMarkers(venue);
+                });
+            }
+            return false;
         }); 
 
         $('#search-form').submit(function () {
