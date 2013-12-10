@@ -144,3 +144,8 @@ ul.sidebar-menu u h2 {
 .sidebar-body {
   height: calc(100% - 40px) !important;
 }
+
+a.leaflet-control-zoom-in, a:visited.leaflet-control-zoom-in,
+a.leaflet-control-zoom-out, a:visited.leaflet-control-zoom-out {
+  color:black;
+}
