@@ -1,6 +1,13 @@
 PlanIt
 ======
 
+What is it?
+-----------
+
+Finding it difficult to plan an event? PlanIt allows you to easily plan a
+spatial and interactive itinerary using popular and reviewed locations from the
+Foursquare API.
+
 The Hudson Hackers
 ------------------
 
@@ -9,12 +16,17 @@ The Hudson Hackers
 *    Sean Wong
 *    Stephen Zhou
 
-What is it?
------------
+Features
+--------
 
-Finding it difficult to plan an event? PlanIt allows you to easily plan a
-spatial and interactive itinerary using popular and reviewed locations from the
-Foursquare API.
+TODO
+
+Screen Shots
+------------
+
+![Splash page](img/sb_splash.png "Splash page")
+
+![Plan your trip!](img/sb_view_new.png "Plan your trip")
 
 Folder Hierarchy
 ----------------
@@ -33,9 +45,3 @@ Folder Hierarchy
     ├── README.md               (This file)
     └── view.html               (Create itinerary page)
 
-Screen Shots
-------------
-
-![Splash page](img/sb_splash.png)
-
-![Plan your trip!](img/sb_view_new.png)
