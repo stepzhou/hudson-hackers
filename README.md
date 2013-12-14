@@ -20,20 +20,22 @@ Folder Hierarchy
 ----------------
 
     ├── css                     (Our css)
-    │   └── custom.css          (Custom css)
-    ├── js                      (Custom javascript)
-    │   ├── configs.js          (Your secret keys)
-    │   ├── configs_public.js   (Public secret key template)
-    │   └── view.js             (Create itinerary js)
+    ├── js                      (Our javascript)
     ├── lib                     (Third-party libraries)
     │   ├── bootstrap
     │   ├── foursquare
     │   ├── jquery
     │   └── leaflet
     ├── about.html              (About page)
-    ├── favicon.ico             (favicon)
+    ├── favicon.png             (favicon)
     ├── index.html              (Splash page)
     ├── manage.html             (Manage itineraries page)
     ├── README.md               (This file)
     └── view.html               (Create itinerary page)
 
+Screen Shots
+------------
+
+![Splash page](img/sb_splash.png)
+
+![Plan your trip!](img/sb_view_new.png)
